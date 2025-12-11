@@ -1,159 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الطالب | الصف الثالث الإعدادي</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        body { font-family: 'Cairo', sans-serif; }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .custom-checkbox:checked + div {
-            border-color: #2563eb;
-            background-color: #eff6ff;
-        }
-        .custom-checkbox:checked + div .check-icon {
-            opacity: 1;
-            transform: scale(1);
-        }
-    </style>
-</head>
-<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
-
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <span class="text-2xl font-black text-blue-600">منصة الطالب</span>
-            </div>
-            <nav class="flex gap-4 font-semibold text-sm">
-                <a href="#" onclick="goHome()" class="hover:text-blue-600">الرئيسية</a>
-            </nav>
-        </div>
-    </header>
-
-    <main id="mainContainer" class="flex-grow container mx-auto px-4 py-8 relative">
-        
-        <section id="heroSection" class="text-center py-10 fade-in">
-            <h1 class="text-4xl md:text-6xl font-black text-slate-800 mb-6">الصف الثالث الإعدادي</h1>
-            <p class="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
-                بنك أسئلة شامل - اختر الدروس واختبر نفسك الآن.
-            </p>
-            <button onclick="scrollToSubjects()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-full shadow-lg transition transform hover:-translate-y-1">
-                ابدأ المذاكرة
-            </button>
-        </section>
-
-        <section id="subjectsSection" class="mt-8 hidden fade-in">
-            <h2 class="text-2xl font-bold border-r-4 border-blue-600 pr-3 mb-6">المواد الدراسية</h2>
-            <div id="subjectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        </section>
-
-        <section id="modeSelection" class="hidden fade-in max-w-2xl mx-auto text-center py-10">
-            <button onclick="goBackToSubjects()" class="mb-6 text-slate-500 hover:text-blue-600 font-bold flex items-center gap-2 mx-auto">
-                &larr; تغيير المادة
-            </button>
-            <h2 id="selectedSubjectTitle" class="text-3xl font-bold mb-8 text-blue-800"></h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div onclick="startMode('pdf')" class="cursor-pointer bg-white p-8 rounded-xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-red-400 transition group">
-                    <div class="text-5xl mb-4">📂</div>
-                    <h3 class="text-xl font-bold group-hover:text-red-500">مذكرات PDF</h3>
-                </div>
-                <div onclick="startMode('quiz')" class="cursor-pointer bg-white p-8 rounded-xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-green-400 transition group">
-                    <div class="text-5xl mb-4">📝</div>
-                    <h3 class="text-xl font-bold group-hover:text-green-600">بدء الاختبار</h3>
-                </div>
-            </div>
-        </section>
-
-        <section id="lessonSelection" class="hidden fade-in max-w-2xl mx-auto pb-24">
-             <div class="flex justify-between items-center mb-4 sticky top-16 bg-slate-50 py-4 z-10">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-800">اختر الدروس</h2>
-                    <p class="text-sm text-slate-500">حدد الدروس التي تريد الاختبار فيها</p>
-                </div>
-                <button onclick="toggleSelectAll()" id="selectAllBtn" class="text-sm text-blue-600 font-bold hover:underline">تحديد الكل</button>
-            </div>
-
-            <div id="lessonsList" class="space-y-3"></div>
-
-            <div id="startQuizContainer" class="fixed bottom-0 left-0 w-full bg-white border-t p-4 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] transform translate-y-full transition duration-300 z-50 flex justify-center">
-                <button onclick="startMultiLessonQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-12 rounded-full shadow-lg text-lg flex items-center gap-2 transition hover:scale-105">
-                    <span>ابدأ الاختبار</span>
-                    <span id="selectedCountBadge" class="bg-white text-blue-600 text-xs px-2 py-1 rounded-full font-bold">0</span>
-                </button>
-            </div>
-        </section>
-
-        <section id="pdfSection" class="hidden fade-in max-w-3xl mx-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">المكتبة الرقمية</h2>
-                <button onclick="goBackToMode()" class="text-sm text-blue-600 font-bold">عودة</button>
-            </div>
-            <div id="pdfList" class="space-y-4"></div>
-        </section>
-
-        <section id="quizSection" class="hidden fade-in max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-lg border border-slate-100 mt-4 relative">
-            
-            <div class="flex justify-between items-center mb-4 border-b pb-4">
-                <span id="quizProgress" class="text-sm font-semibold text-slate-500 font-mono">سؤال 1</span>
-                <button onclick="finishQuizEarly()" class="bg-red-50 text-red-600 text-sm font-bold px-4 py-1.5 rounded hover:bg-red-100 transition border border-red-200">
-                    إنهاء الاختبار والحصول على النتيجة
-                </button>
-            </div>
-
-            <div id="quizContent">
-                <div class="mb-4">
-                    <span id="lessonSourceBadge" class="hidden inline-block bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full font-bold border border-yellow-200 shadow-sm"></span>
-                </div>
-
-                <h3 id="questionText" class="text-xl font-bold mb-6 leading-relaxed text-slate-800"></h3>
-                <div id="optionsContainer" class="space-y-3"></div>
-            </div>
-
-            <div id="quizResult" class="hidden text-center py-6">
-                <div class="text-6xl mb-4 animate-bounce">📊</div>
-                <h3 class="text-2xl font-bold mb-6 text-slate-800">تقرير النتيجة</h3>
-                
-                <div class="grid grid-cols-3 gap-4 mb-8">
-                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                        <span class="block text-2xl font-bold text-blue-600" id="resAnswered">0</span>
-                        <span class="text-xs text-blue-400 font-bold">تمت إجابته</span>
-                    </div>
-                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
-                        <span class="block text-2xl font-bold text-green-600" id="resCorrect">0</span>
-                        <span class="text-xs text-green-400 font-bold">صحيح</span>
-                    </div>
-                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
-                        <span class="block text-2xl font-bold text-red-600" id="resWrong">0</span>
-                        <span class="text-xs text-red-400 font-bold">أخطاء</span>
-                    </div>
-                </div>
-
-                <div class="mb-8">
-                    <p class="text-slate-500 text-sm mb-1">النتيجة النهائية</p>
-                    <div class="text-4xl font-black text-slate-800 dir-ltr">
-                        <span id="finalScorePercent">0</span>%
-                    </div>
-                </div>
-
-                <div class="flex gap-4 justify-center">
-                    <button onclick="quitQuiz()" class="bg-slate-200 text-slate-700 px-6 py-2 rounded-lg hover:bg-slate-300 font-bold">اختيار دروس أخرى</button>
-                    <button onclick="startMultiLessonQuiz()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-bold shadow-lg shadow-blue-200">إعادة المحاولة</button>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="bg-slate-800 text-slate-300 py-6 text-center mt-auto">
-        <p>جميع الحقوق محفوظة &copy; 2025 منصة الطالب - اعداد/ علي ياسر احمد محمد</p>
-    </footer>
-
-    <script src="data.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
