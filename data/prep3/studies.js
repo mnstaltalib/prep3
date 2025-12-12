@@ -3,11 +3,11 @@ export const studiesData = {
     name: "الدراسات",
     icon: "🌍", 
 
-    isLocked: true,        // هل المادة كلها مغلقة؟
-        isPdfLocked: true,     // هل المكتبة الرقمية مغلقة؟
+    isLocked: false,        // هل المادة كلها مغلقة؟
+        isPdfLocked: false,     // هل المكتبة الرقمية مغلقة؟
         isQuizLocked: true,     // هل الاختبارات مغلقة؟ 
     pdfs: [
-        { title: "اسم المذكرة", link: "#", size: "5MB" }
+        { title: "ملخص الامتحان", link: "https://drive.usercontent.google.com/u/0/uc?id=1XYBYt_N-mkSkP3eIFy9IS3f6x3VdmuOF&export=download", size: "82MB" }
     ],
     lessons: [
 {
