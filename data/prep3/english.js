@@ -5,7 +5,7 @@ export const englishData = {
 
     isLocked: true,        // هل المادة كلها مغلقة؟
         isPdfLocked: true,     // هل المكتبة الرقمية مغلقة؟
-        isQuizLocked: true,     // هل الاختبارات مغلقة؟ (تم التفعيل حسب طلبك)
+        isQuizLocked: true,     // هل الاختبارات مغلقة؟
 
     pdfs: [
         { title: "مذكرة النحو - أ/ إبراهيم صالح", link: "#", size: "5MB" }

@@ -7,7 +7,8 @@ export const studiesData = {
         isPdfLocked: false,     // هل المكتبة الرقمية مغلقة؟
         isQuizLocked: true,     // هل الاختبارات مغلقة؟ 
     pdfs: [
-        { title: "ملخص الامتحان", link: "https://drive.usercontent.google.com/u/0/uc?id=1XYBYt_N-mkSkP3eIFy9IS3f6x3VdmuOF&export=download", size: "82MB" }
+        { title: "ملخص الامتحان", link: "https://drive.usercontent.google.com/u/0/uc?id=1XYBYt_N-mkSkP3eIFy9IS3f6x3VdmuOF&export=download", size: "82MB" },
+        { title: "ملخص الأضواء", link: "https://drive.usercontent.google.com/u/0/uc?id=1rQCU3vEw4CiYEDzade-JW8cwN4DVu8hd&export=download", size: "56MB" },
     ],
     lessons: [
 {

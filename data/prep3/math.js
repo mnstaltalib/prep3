@@ -3,8 +3,8 @@ export const mathData = {
     name: "الرياضيات",
     icon: "📐", 
 
-    isLocked: true,        // هل المادة كلها مغلقة؟
-        isPdfLocked: true,     // هل المكتبة الرقمية مغلقة؟
+    isLocked: false,        // هل المادة كلها مغلقة؟
+        isPdfLocked: false,     // هل المكتبة الرقمية مغلقة؟
         isQuizLocked: true,     // هل الاختبارات مغلقة؟ 
     pdfs: [
         { title: "ملخص المعاصر", link: "https://drive.usercontent.google.com/u/0/uc?id=1Qf_-Q2e7ROLbgUlX3W5mvTw7REUn_KJb&export=download", size: "68MB" },

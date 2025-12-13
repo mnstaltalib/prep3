@@ -5,7 +5,7 @@ export const arabicData = {
 
     isLocked: false,        // هل المادة كلها مغلقة؟
         isPdfLocked: false,     // هل المكتبة الرقمية مغلقة؟
-        isQuizLocked: true,     // هل الاختبارات مغلقة؟ (تم التفعيل حسب طلبك)
+        isQuizLocked: true,     // هل الاختبارات مغلقة؟
 
     pdfs: [
         { title: "ملخص الامتحان", link: "https://drive.usercontent.google.com/u/0/uc?id=1idRMf5bdN6KmSNgt9jNvULiQNNyPxko5&export=download", size: "61MB" },
