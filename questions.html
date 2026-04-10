@@ -222,6 +222,24 @@
     </main>
 
     <div id="footer-container"></div>
+
+    <script>
+        window.questionsData = []; // تهيئة بنك الأسئلة الرئيسي
+
+        // دالة عامة تُنادى من داخل ملف كل مادة لتحويل البيانات ودمجها
+        window.addSubjectQuestions = function(subjectName, rawData) {
+            const formattedData = rawData.map(item => {
+                if (item[1] === 'mcq') {
+                    return { id: item[0], subject: subjectName, type: 'mcq', lesson: item[2], question: item[3], options: item[4], correctAnswer: item[5] };
+                } else if (item[1] === 'essay') {
+                    return { id: item[0], subject: subjectName, type: 'essay', lesson: item[2], question: item[3], correctAnswer: item[4] };
+                }
+                return null;
+            });
+            window.questionsData = window.questionsData.concat(formattedData.filter(q => q !== null));
+        };
+    </script>
+
     <script src="data/questions/arabic.js"></script>
     <script src="layout.js"></script>
 
@@ -232,7 +250,7 @@
         // =========================================================================
         const systemConfig = {
             // 1. القفل العام لبنك الأسئلة (Module Lock)
-            isModuleLocked: true, 
+            isModuleLocked: false, 
             moduleLockMessage: "نعتذر، بنك الأسئلة يخضع للتحديثات حالياً. يرجى العودة لاحقاً.",
 
             // 2. إعدادات المواد (Subjects)
@@ -243,7 +261,7 @@
                     grading: { excellent: 50, passing: 30, incomplete: 15 },
                     types: {
                         mcq: { locked: false, message: "الاختياري مغلق حالياً." },
-                        essay: { locked: true, message: "المقالي مغلق للتصحيح." } // <--- مثال: المقالي مغلق في العربي
+                        essay: { locked: false, message: "المقالي مغلق للتصحيح." } // <--- مثال: المقالي مغلق في العربي
                     }
                 },
                 'علوم': {

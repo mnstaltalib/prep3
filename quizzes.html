@@ -22,6 +22,18 @@
     </script>
 
     <style>
+        /* --- تخصيص شريط التمرير (Scrollbar) --- */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* شريط التمرير في الوضع الليلي */
+        .dark ::-webkit-scrollbar-track { background: #171717; }
+        .dark ::-webkit-scrollbar-thumb { background: #404040; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #525252; }
+
+        /* --- الانميشن --- */
         main { animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); }
         @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
@@ -42,18 +54,13 @@
     <main class="flex-grow container mx-auto px-4 py-8 md:py-12">
         
         <div id="moduleLockedScreen" class="hidden max-w-2xl mx-auto text-center py-20 bg-white dark:bg-neutral-800 rounded-3xl shadow-xl border dark:border-neutral-700 fade-in">
-            <div class="mb-6 animate-bounce">
-                <i class="fa-solid fa-lock text-6xl text-gray-400 dark:text-gray-600"></i>
-            </div>
+            <div class="mb-6 animate-bounce"><i class="fa-solid fa-lock text-6xl text-gray-400 dark:text-gray-600"></i></div>
             <h1 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">القسم مغلق حالياً</h1>
             <p id="moduleLockMessage" class="text-gray-500 dark:text-gray-400 text-lg mb-8 px-8">نعتذر، هذا القسم يخضع للصيانة الدورية.</p>
-            <a href="index.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg transition-transform hover:-translate-y-1">
-                العودة للرئيسية
-            </a>
+            <a href="index.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg transition-transform hover:-translate-y-1">العودة للرئيسية</a>
         </div>
 
         <div id="examWizard" class="max-w-4xl mx-auto bg-white dark:bg-neutral-800 p-6 md:p-8 rounded-2xl shadow-lg border dark:border-neutral-700 min-h-[450px] relative overflow-hidden fade-in">
-            
             <header class="text-center mb-8">
                 <h1 class="text-2xl md:text-3xl font-bold mb-2 text-blue-600 dark:text-blue-400">نظام الاختبارات</h1>
                 <p class="text-gray-600 dark:text-neutral-400 text-sm">اختر المادة ثم الاختبار.</p>
@@ -61,32 +68,12 @@
 
             <div id="stepSubject" class="text-center fade-in">
                 <h2 class="text-lg md:text-xl font-bold mb-6">اختر المادة الدراسية:</h2>
-                
                 <div class="flex flex-wrap justify-center gap-4 max-w-3xl mx-auto">
-                    <button onclick="selectSubject('عربي')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-green-50 dark:bg-neutral-700 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-xl border border-green-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm">
-                        <i class="fa-solid fa-book text-2xl md:text-3xl text-green-600 mb-2 block"></i>
-                        <span class="font-bold">لغة عربية</span>
-                    </button>
-
-                    <button onclick="selectSubject('علوم')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-purple-50 dark:bg-neutral-700 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded-xl border border-purple-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm">
-                        <i class="fa-solid fa-flask text-2xl md:text-3xl text-purple-600 mb-2 block"></i>
-                        <span class="font-bold">علوم</span>
-                    </button>
-
-                    <button onclick="selectSubject('دراسات')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-yellow-50 dark:bg-neutral-700 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 rounded-xl border border-yellow-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm">
-                        <i class="fa-solid fa-globe text-2xl md:text-3xl text-yellow-600 mb-2 block"></i>
-                        <span class="font-bold">دراسات</span>
-                    </button>
-
-                    <button onclick="selectSubject('رياضيات')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-blue-50 dark:bg-neutral-700 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-xl border border-blue-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm">
-                        <i class="fa-solid fa-calculator text-2xl md:text-3xl text-blue-600 mb-2 block"></i>
-                        <span class="font-bold">رياضيات</span>
-                    </button>
-
-                    <button onclick="selectSubject('انجليزي')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-red-50 dark:bg-neutral-700 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-xl border border-red-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm">
-                        <i class="fa-solid fa-language text-2xl md:text-3xl text-red-600 mb-2 block"></i>
-                        <span class="font-bold">إنجليزي</span>
-                    </button>
+                    <button onclick="selectSubject('عربي')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-green-50 dark:bg-neutral-700 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-xl border border-green-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm"><i class="fa-solid fa-book text-2xl md:text-3xl text-green-600 mb-2 block"></i><span class="font-bold">لغة عربية</span></button>
+                    <button onclick="selectSubject('علوم')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-purple-50 dark:bg-neutral-700 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded-xl border border-purple-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm"><i class="fa-solid fa-flask text-2xl md:text-3xl text-purple-600 mb-2 block"></i><span class="font-bold">علوم</span></button>
+                    <button onclick="selectSubject('دراسات')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-yellow-50 dark:bg-neutral-700 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 rounded-xl border border-yellow-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm"><i class="fa-solid fa-globe text-2xl md:text-3xl text-yellow-600 mb-2 block"></i><span class="font-bold">دراسات</span></button>
+                    <button onclick="selectSubject('رياضيات')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-blue-50 dark:bg-neutral-700 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-xl border border-blue-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm"><i class="fa-solid fa-calculator text-2xl md:text-3xl text-blue-600 mb-2 block"></i><span class="font-bold">رياضيات</span></button>
+                    <button onclick="selectSubject('انجليزي')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-red-50 dark:bg-neutral-700 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-xl border border-red-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm"><i class="fa-solid fa-language text-2xl md:text-3xl text-red-600 mb-2 block"></i><span class="font-bold">إنجليزي</span></button>
                 </div>
             </div>
 
@@ -95,7 +82,7 @@
                     <h2 class="text-lg md:text-xl font-bold">الاختبارات المتاحة:</h2>
                     <button onclick="backToStep('stepSubject')" class="text-sm text-gray-400 hover:text-blue-500"><i class="fa-solid fa-arrow-right"></i> عودة</button>
                 </div>
-                <div id="examsGrid" class="grid grid-cols-1 gap-4 max-h-80 overflow-y-auto custom-scrollbar"></div>
+                <div id="examsGrid" class="grid grid-cols-1 gap-4 max-h-80 overflow-y-auto custom-scrollbar p-2"></div>
             </div>
 
             <div id="stepStartOptions" class="hidden text-center">
@@ -104,7 +91,7 @@
                     <button onclick="backToStep('stepExamsList')" class="text-sm text-gray-400 hover:text-blue-500"><i class="fa-solid fa-arrow-right"></i> عودة</button>
                 </div>
                 <p class="mb-8 text-gray-500">اختر القسم الذي تريد البدء به:</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto" id="startButtonsContainer"></div>
+                <div id="startButtonsContainer"></div>
             </div>
         </div>
 
@@ -114,9 +101,7 @@
                     <span id="sectionTitleBadge" class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded ml-2"></span>
                     سؤال <span id="qCurrent">1</span> من <span id="qTotal">10</span>
                 </span>
-                <div class="flex items-center gap-2 text-red-600 font-bold font-mono text-lg">
-                    <i class="fa-regular fa-clock"></i> <span id="timerText">00</span>
-                </div>
+                <div class="flex items-center gap-2 text-red-600 font-bold font-mono text-lg"><i class="fa-regular fa-clock"></i> <span id="timerText">00</span></div>
             </div>
 
             <div class="h-2 w-full bg-gray-200 dark:bg-neutral-700 rounded-full overflow-hidden mb-6">
@@ -125,9 +110,7 @@
 
             <div class="relative bg-white dark:bg-neutral-800 rounded-2xl shadow-lg border dark:border-neutral-700 overflow-hidden min-h-[300px]">
                 <div id="questionContent" class="p-6 md:p-8 transition-all duration-300 filter blur-md select-none">
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="text-xs text-gray-400">زمن السؤال: <span id="qTimeLimit"></span> ثانية</span>
-                    </div>
+                    <div class="flex items-center gap-2 mb-4"><span class="text-xs text-gray-400">زمن السؤال: <span id="qTimeLimit"></span> ثانية</span></div>
                     <h3 id="questionText" class="text-xl md:text-2xl font-bold mb-8 leading-relaxed text-gray-900 dark:text-neutral-100"></h3>
                     <div id="interactionArea"></div>
                 </div>
@@ -162,105 +145,129 @@
             </div>
         </div>
 
-        <div id="resultsArea" class="hidden max-w-2xl mx-auto text-center fade-in bg-white dark:bg-neutral-800 p-8 rounded-2xl shadow-xl border dark:border-neutral-700 mt-8">
-            <h2 class="text-3xl font-bold mb-6">النتيجة النهائية</h2>
-            <div class="grid grid-cols-3 gap-4 mb-8">
-                <div class="p-4 bg-gray-50 dark:bg-neutral-900 rounded-xl"><span class="block text-gray-500 text-xs mb-1">المجموع</span><span id="resTotal" class="text-2xl font-bold text-gray-800 dark:text-white">0</span></div>
-                <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl"><span class="block text-green-600 text-xs mb-1">صحيح</span><span id="resCorrect" class="text-2xl font-bold text-green-600">0</span></div>
-                <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl"><span class="block text-red-600 text-xs mb-1">خطأ</span><span id="resWrong" class="text-2xl font-bold text-red-600">0</span></div>
+        <div id="resultsArea" class="hidden max-w-3xl mx-auto fade-in mt-8">
+            <div class="bg-white dark:bg-neutral-800 p-8 rounded-2xl shadow-xl border dark:border-neutral-700 mb-8 text-center">
+                <h2 class="text-3xl font-bold mb-2">النتيجة النهائية</h2>
+                <div id="gradeBadge" class="text-2xl font-bold mb-6 p-2 px-6 rounded-lg inline-block border-2"></div>
+                
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="p-4 bg-gray-50 dark:bg-neutral-900 rounded-xl"><span class="block text-gray-500 text-xs mb-1">المجموع</span><span id="resTotal" class="text-2xl font-bold text-gray-800 dark:text-white">0</span></div>
+                    <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl"><span class="block text-green-600 text-xs mb-1">صحيح</span><span id="resCorrect" class="text-2xl font-bold text-green-600">0</span></div>
+                    <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl"><span class="block text-red-600 text-xs mb-1">خطأ</span><span id="resWrong" class="text-2xl font-bold text-red-600">0</span></div>
+                </div>
+                <div class="mb-8 relative pt-1">
+                    <span id="resPercentageText" class="block text-4xl font-bold mb-2">0%</span>
+                    <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200 dark:bg-neutral-700"><div id="resProgressBar" style="width:0%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-1000"></div></div>
+                </div>
+                <button onclick="location.reload()" class="bg-gray-800 text-white px-6 py-3 rounded-xl font-bold hover:scale-105 transition-transform"><i class="fa-solid fa-home ml-2"></i> القائمة الرئيسية</button>
             </div>
-            <div class="mb-8 relative pt-1">
-                <span id="resPercentageText" class="block text-4xl font-bold mb-2">0%</span>
-                <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200 dark:bg-neutral-700"><div id="resProgressBar" style="width:0%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-1000"></div></div>
+
+            <div class="bg-white dark:bg-neutral-800 p-6 md:p-8 rounded-2xl shadow-xl border dark:border-neutral-700">
+                <h3 class="text-2xl font-bold mb-6 border-b dark:border-neutral-700 pb-4 text-gray-800 dark:text-white"><i class="fa-solid fa-file-lines text-blue-500 ml-2"></i> تقرير الإجابات المفصل</h3>
+                <div id="answersReportContainer" class="flex flex-col gap-4"></div>
             </div>
-            <button onclick="location.reload()" class="bg-gray-800 text-white px-6 py-3 rounded-xl font-bold"><i class="fa-solid fa-home ml-2"></i> القائمة الرئيسية</button>
         </div>
 
     </main>
 
     <div id="footer-container"></div>
-    <script src="data/exams/arabic/exam1.js"></script> 
+
+    <script>
+        window.examsData = [];
+        window.addExam = function(metaData, rawQuestions) {
+            const formattedQuestions = rawQuestions.map(q => {
+                if (q[0] === 'mcq') return { type: 'mcq', timeLimit: q[1], question: q[2], options: q[3], correctAnswer: q[4] };
+                else if (q[0] === 'essay') return { type: 'essay', timeLimit: q[1], question: q[2], correctAnswer: q[3] };
+                return null;
+            }).filter(q => q !== null);
+            const availableTypes = [...new Set(formattedQuestions.map(q => q.type))];
+            // حفظ المتغير order (وإذا لم يكن موجوداً نضع 99 ليكون في الأسفل)
+            window.examsData.push({ id: metaData.id, order: metaData.order || 99, subject: metaData.subject, title: metaData.title, types: availableTypes, questions: formattedQuestions });
+        };
+
+        const examFilesToLoad = [
+            'data/exams/arabic/exam1.js',
+            'data/exams/arabic/exam2.js',
+            'data/exams/arabic/exam3.js',
+            'data/exams/arabic/grammer_exam1.js',
+            'data/exams/arabic/grammer_exam2.js'
+        ];
+        examFilesToLoad.forEach(file => {
+            const script = document.createElement('script'); script.src = file; document.body.appendChild(script);
+        });
+    </script>
+
     <script src="layout.js"></script>
 
     <script>
-        // =========================================================================
-        // ⚙️ إعدادات النظام والقفل (System Config)
-        // =========================================================================
         const systemConfig = {
-            // 1. قفل القسم بالكامل
-            isModuleLocked: true, 
+            isModuleLocked: false,
             moduleLockMessage: "نعتذر، قسم الاختبارات تحت التحضير حالياً.",
-
-            // 2. إعدادات المواد (قفل/فتح)
-            subjects: {
-                'عربي': { locked: false, message: "اختبارات العربي مغلقة." },
-                'علوم': { locked: false, message: "اختبارات العلوم مغلقة." },
-                'دراسات': { locked: false, message: "" },
-                'رياضيات': { locked: false, message: "" },
-                'انجليزي': { locked: false, message: "" }
-            }
+            subjects: { 'عربي': { locked: false }, 'علوم': { locked: false }, 'دراسات': { locked: false }, 'رياضيات': { locked: false }, 'انجليزي': { locked: false } }
         };
 
-        // --- تهيئة النظام عند التحميل ---
         document.addEventListener('DOMContentLoaded', () => {
-            // التحقق من القفل العام للقسم
             if (systemConfig.isModuleLocked) {
                 document.getElementById('examWizard').classList.add('hidden');
-                const lockScreen = document.getElementById('moduleLockedScreen');
+                document.getElementById('moduleLockedScreen').classList.remove('hidden');
                 document.getElementById('moduleLockMessage').innerText = systemConfig.moduleLockMessage;
-                lockScreen.classList.remove('hidden');
             }
         });
 
-        // =========================================================================
-        // منطق التطبيق
-        // =========================================================================
-        let appState = { currentExam: null, completedTypes: [], queue: [], currentIdx: 0, totalStats: { correct: 0, wrong: 0, totalAnswered: 0 }, timer: null, timeLeft: 0, totalTime: 0, isAnswered: false };
+        // متغيرات النظام مع إضافة (history) لتقرير الإجابات
+        let appState = { currentExam: null, completedTypes: [], queue: [], currentIdx: 0, totalStats: { correct: 0, wrong: 0, totalAnswered: 0 }, timer: null, timeLeft: 0, totalTime: 0, isAnswered: false, history: [] };
+
+        // --- نظام الأصوات (Web Audio API) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+
+            if (type === 'correct' || type === 'excellent') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.exponentialRampToValueAtTime(1046.5, now + 0.1); // C6
+                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+            } else if (type === 'acceptable') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now);
+                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                osc.start(now); osc.stop(now + 0.2);
+            } else if (type === 'incomplete') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(300, now);
+                gainNode.gain.setValueAtTime(0.1, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+            }
+        }
 
         function transitionStep(currentId, nextId) {
-            const current = document.getElementById(currentId);
-            const next = document.getElementById(nextId);
+            const current = document.getElementById(currentId); const next = document.getElementById(nextId);
             current.classList.add('fade-out');
-            setTimeout(() => {
-                current.classList.add('hidden'); current.classList.remove('fade-out');
-                next.classList.remove('hidden'); next.classList.add('fade-in');
-            }, 300);
+            setTimeout(() => { current.classList.add('hidden'); current.classList.remove('fade-out'); next.classList.remove('hidden'); next.classList.add('fade-in'); }, 300);
         }
+        function backToStep(targetId) { ['stepSubject', 'stepExamsList', 'stepStartOptions'].forEach(id => document.getElementById(id).classList.add('hidden')); document.getElementById(targetId).classList.remove('hidden'); document.getElementById(targetId).classList.add('fade-in'); }
 
-        function backToStep(targetId) {
-            ['stepSubject', 'stepExamsList', 'stepStartOptions'].forEach(id => document.getElementById(id).classList.add('hidden'));
-            document.getElementById(targetId).classList.remove('hidden');
-            document.getElementById(targetId).classList.add('fade-in');
-        }
-
-        // --- 1. اختيار المادة (مع التحقق من القفل) ---
         function selectSubject(subject) {
-            // فحص حالة القفل للمادة
-            const config = systemConfig.subjects[subject];
-            if (config && config.locked) {
-                alert("🔒 " + config.message);
-                return;
-            }
-
-            const container = document.getElementById('examsGrid');
-            container.innerHTML = '';
+            if (systemConfig.subjects[subject] && systemConfig.subjects[subject].locked) return alert("🔒 " + systemConfig.subjects[subject].message);
+            const container = document.getElementById('examsGrid'); container.innerHTML = '';
             
-            const exams = (window.examsData || []).filter(e => e.subject === subject);
+            // ترتيب الاختبارات بناءً على خاصية order
+            const exams = (window.examsData || []).filter(e => e.subject === subject).sort((a, b) => a.order - b.order);
 
-            if (exams.length === 0) {
-                container.innerHTML = '<p class="text-center text-gray-500 py-8">لا توجد اختبارات متاحة لهذه المادة.</p>';
-            } else {
+            if (exams.length === 0) container.innerHTML = '<p class="text-center text-gray-500 py-8">لا توجد اختبارات متاحة.</p>';
+            else {
                 exams.forEach(exam => {
-                    const badges = exam.types.map(t => 
-                        t === 'mcq' ? '<span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded ml-1">اختياري</span>' 
-                        : '<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded ml-1">مقالي</span>'
-                    ).join('');
-
-                    const div = document.createElement('div');
-                    div.className = 'bg-gray-50 dark:bg-neutral-900 p-4 rounded-xl border border-gray-200 dark:border-neutral-700 flex justify-between items-center hover:shadow-md cursor-pointer transition-all';
+                    const badges = exam.types.map(t => t === 'mcq' ? '<span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded ml-1">اختياري</span>' : '<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded ml-1">مقالي</span>').join('');
+                    const div = document.createElement('div'); div.className = 'bg-gray-50 dark:bg-neutral-900 p-4 rounded-xl border border-gray-200 dark:border-neutral-700 flex justify-between items-center hover:shadow-md cursor-pointer transition-all';
                     div.innerHTML = `<div><h3 class="font-bold text-gray-800 dark:text-white mb-1">${exam.title}</h3><div class="flex">${badges}</div></div><i class="fa-solid fa-chevron-left text-gray-400"></i>`;
-                    div.onclick = () => selectExam(exam.id);
-                    container.appendChild(div);
+                    div.onclick = () => selectExam(exam.id); container.appendChild(div);
                 });
             }
             transitionStep('stepSubject', 'stepExamsList');
@@ -268,28 +275,29 @@
 
         function selectExam(examId) {
             appState.currentExam = window.examsData.find(e => e.id === examId);
-            appState.completedTypes = []; appState.totalStats = { correct: 0, wrong: 0, totalAnswered: 0 };
-            document.getElementById('selectedExamTitle').innerText = appState.currentExam.title;
-            renderStartButtons(); transitionStep('stepExamsList', 'stepStartOptions');
+            appState.completedTypes = []; appState.totalStats = { correct: 0, wrong: 0, totalAnswered: 0 }; appState.history = [];
+            document.getElementById('selectedExamTitle').innerText = appState.currentExam.title; renderStartButtons(); transitionStep('stepExamsList', 'stepStartOptions');
         }
 
         function renderStartButtons() {
             const btnContainer = document.getElementById('startButtonsContainer'); btnContainer.innerHTML = '';
-            appState.currentExam.types.forEach(type => {
-                if (!appState.completedTypes.includes(type)) {
-                    let icon = type === 'mcq' ? 'fa-list-check text-blue-500' : 'fa-pen-nib text-green-500';
-                    let title = type === 'mcq' ? 'الأسئلة الاختيارية' : 'الأسئلة المقالية';
-                    let count = appState.currentExam.questions.filter(q => q.type === type).length;
-                    btnContainer.innerHTML += `<button onclick="startSection('${type}')" class="p-6 border-2 border-dashed border-gray-300 dark:border-neutral-600 hover:bg-gray-50 dark:hover:bg-neutral-700 rounded-xl transition-all group"><i class="fa-solid ${icon} text-4xl mb-4 group-hover:scale-110 transition-transform"></i><h3 class="text-xl font-bold dark:text-white">${title}</h3><p class="text-sm text-gray-500 mt-2">(${count} سؤال)</p></button>`;
-                }
+            let pendingTypes = appState.currentExam.types.filter(type => !appState.completedTypes.includes(type));
+            
+            // توسيط الزر إذا كان قسماً واحداً فقط
+            btnContainer.className = pendingTypes.length === 1 ? "flex justify-center max-w-md mx-auto" : "grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto";
+
+            pendingTypes.forEach(type => {
+                let icon = type === 'mcq' ? 'fa-list-check text-blue-500' : 'fa-pen-nib text-green-500';
+                let title = type === 'mcq' ? 'الأسئلة الاختيارية' : 'الأسئلة المقالية';
+                let count = appState.currentExam.questions.filter(q => q.type === type).length;
+                btnContainer.innerHTML += `<button onclick="startSection('${type}')" class="w-full p-6 border-2 border-dashed border-gray-300 dark:border-neutral-600 hover:bg-gray-50 dark:hover:bg-neutral-700 rounded-xl transition-all group"><i class="fa-solid ${icon} text-4xl mb-4 group-hover:scale-110 transition-transform"></i><h3 class="text-xl font-bold dark:text-white">${title}</h3><p class="text-sm text-gray-500 mt-2">(${count} سؤال)</p></button>`;
             });
         }
 
         function startSection(type) {
             appState.queue = appState.currentExam.questions.filter(q => q.type === type); appState.currentIdx = 0; appState.completedTypes.push(type);
             document.getElementById('examWizard').classList.add('hidden'); document.getElementById('intermissionScreen').classList.add('hidden'); document.getElementById('quizArea').classList.remove('hidden');
-            document.getElementById('sectionTitleBadge').innerText = type === 'mcq' ? 'اختياري' : 'مقالي'; document.getElementById('qTotal').innerText = appState.queue.length;
-            loadQuestion();
+            document.getElementById('sectionTitleBadge').innerText = type === 'mcq' ? 'اختياري' : 'مقالي'; document.getElementById('qTotal').innerText = appState.queue.length; loadQuestion();
         }
 
         function loadQuestion() {
@@ -301,6 +309,7 @@
         }
 
         function revealQuestion() {
+            if(audioCtx.state === 'suspended') audioCtx.resume(); // تهيئة الصوت عند أول تفاعل
             const q = appState.queue[appState.currentIdx]; document.getElementById('questionContent').classList.remove('blur-md', 'select-none'); document.getElementById('blurOverlay').classList.add('hidden');
             appState.totalTime = q.timeLimit; appState.timeLeft = q.timeLimit;
             if (appState.timer) clearInterval(appState.timer); appState.timer = setInterval(() => { appState.timeLeft--; document.getElementById('timerText').innerText = appState.timeLeft < 10 ? '0'+appState.timeLeft : appState.timeLeft; const pct = (appState.timeLeft / appState.totalTime) * 100; const bar = document.getElementById('timerBar'); bar.style.width = pct + '%'; if (pct < 30) bar.className = 'h-full timer-bar bg-red-600'; else if (pct < 60) bar.className = 'h-full timer-bar bg-yellow-500'; if (appState.timeLeft <= 0) { clearInterval(appState.timer); forceSubmit(); } }, 1000);
@@ -312,22 +321,73 @@
 
         function submitAnswer(selectedIndex = null, btnElement = null, isForced = false) {
             if (appState.isAnswered && !isForced) return; appState.isAnswered = true; clearInterval(appState.timer);
-            const q = appState.queue[appState.currentIdx]; let isCorrect = false; let feedbackHtml = '';
+            const q = appState.queue[appState.currentIdx]; let isCorrect = false; let feedbackHtml = ''; let statusType = ''; let userAnsText = ''; let correctAnsText = '';
+
             if (q.type === 'mcq') {
                 document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
-                if (isForced && selectedIndex === -1) { feedbackHtml = `<div class="text-red-500 font-bold mb-2">انتهى الوقت!</div>`; const correctBtn = document.querySelectorAll('.option-btn')[q.correctAnswer]; if(correctBtn) correctBtn.className += ' bg-green-100 dark:bg-green-900/40 border-green-500 dark:border-green-500'; } else { if (selectedIndex === q.correctAnswer) { isCorrect = true; btnElement.className += ' bg-green-100 dark:bg-green-900/40 border-green-500 dark:border-green-500 text-green-900 dark:text-green-100'; feedbackHtml = `<div class="text-green-600 dark:text-green-400 font-bold"><i class="fa-solid fa-check"></i> إجابة صحيحة</div>`; } else { btnElement.className += ' bg-red-100 dark:bg-red-900/40 border-red-500 dark:border-red-500 text-red-900 dark:text-red-100'; const correctBtn = document.querySelectorAll('.option-btn')[q.correctAnswer]; if(correctBtn) correctBtn.className += ' bg-green-50 dark:bg-green-900/20 border-green-500 dark:border-green-500'; feedbackHtml = `<div class="text-red-600 dark:text-red-400 font-bold"><i class="fa-solid fa-xmark"></i> إجابة خاطئة</div>`; } }
+                correctAnsText = q.options[q.correctAnswer];
+                if (isForced && selectedIndex === -1) { userAnsText = 'لم يُجب (انتهى الوقت)'; statusType = 'wrong'; feedbackHtml = `<div class="text-red-500 font-bold mb-2">انتهى الوقت!</div>`; const correctBtn = document.querySelectorAll('.option-btn')[q.correctAnswer]; if(correctBtn) correctBtn.className += ' bg-green-100 dark:bg-green-900/40 border-green-500'; } 
+                else { 
+                    userAnsText = q.options[selectedIndex];
+                    if (selectedIndex === q.correctAnswer) { isCorrect = true; statusType = 'correct'; btnElement.className += ' bg-green-100 dark:bg-green-900/40 border-green-500 text-green-900 dark:text-green-100'; feedbackHtml = `<div class="text-green-600 dark:text-green-400 font-bold"><i class="fa-solid fa-check"></i> إجابة صحيحة</div>`; } 
+                    else { statusType = 'wrong'; btnElement.className += ' bg-red-100 dark:bg-red-900/40 border-red-500 text-red-900 dark:text-red-100'; const correctBtn = document.querySelectorAll('.option-btn')[q.correctAnswer]; if(correctBtn) correctBtn.className += ' bg-green-50 dark:bg-green-900/20 border-green-500'; feedbackHtml = `<div class="text-red-600 dark:text-red-400 font-bold"><i class="fa-solid fa-xmark"></i> إجابة خاطئة</div>`; } 
+                }
             } else {
-                const input = document.getElementById('essayInput'); if(input) input.disabled = true; const userText = input ? input.value.trim() : "";
-                const similarity = calculateSimilarity(userText, q.correctAnswer); const score = Math.round(similarity * 100); const passingScore = q.passingScore || 50;
-                if (score >= passingScore + 20) { isCorrect = true; feedbackHtml = `<div class="text-green-600 dark:text-green-400 font-bold"><i class="fa-solid fa-star"></i> إجابة ممتازة!</div>`; } else if (score >= passingScore) { isCorrect = true; feedbackHtml = `<div class="text-blue-600 dark:text-blue-400 font-bold"><i class="fa-solid fa-check"></i> إجابة مقبولة.</div>`; } else if (score >= passingScore - 15) { feedbackHtml = `<div class="text-yellow-600 dark:text-yellow-400 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> إجابة ناقصة.</div>`; } else { feedbackHtml = `<div class="text-red-600 dark:text-red-400 font-bold"><i class="fa-solid fa-xmark"></i> إجابة غير دقيقة.</div>`; }
+                const input = document.getElementById('essayInput'); if(input) input.disabled = true; userAnsText = input ? input.value.trim() : "لم يُجب"; correctAnsText = q.correctAnswer;
+                const similarity = calculateSimilarity(userAnsText, q.correctAnswer); const score = Math.round(similarity * 100); const passingScore = q.passingScore || 50;
+                if (!userAnsText) { statusType = 'wrong'; feedbackHtml = `<div class="text-red-600 font-bold"><i class="fa-solid fa-xmark"></i> لم تكتب إجابة.</div>`; }
+                else if (score >= passingScore + 20) { isCorrect = true; statusType = 'excellent'; feedbackHtml = `<div class="text-green-600 dark:text-green-400 font-bold"><i class="fa-solid fa-star"></i> إجابة ممتازة!</div>`; } 
+                else if (score >= passingScore) { isCorrect = true; statusType = 'acceptable'; feedbackHtml = `<div class="text-blue-600 dark:text-blue-400 font-bold"><i class="fa-solid fa-check"></i> إجابة مقبولة.</div>`; } 
+                else if (score >= passingScore - 15) { statusType = 'incomplete'; feedbackHtml = `<div class="text-yellow-600 dark:text-yellow-400 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> إجابة ناقصة.</div>`; } 
+                else { statusType = 'wrong'; feedbackHtml = `<div class="text-red-600 dark:text-red-400 font-bold"><i class="fa-solid fa-xmark"></i> إجابة غير دقيقة.</div>`; }
                 if(isForced) feedbackHtml = `<div class="text-red-500 font-bold mb-1">انتهى الوقت!</div>` + feedbackHtml; feedbackHtml += `<div class="mt-3 text-sm text-gray-600 dark:text-gray-300 bg-white dark:bg-neutral-950 p-3 rounded border dark:border-neutral-700"><span class="font-bold block mb-1">النموذج:</span> ${q.correctAnswer}</div>`;
             }
+            
+            playSound(statusType); // تشغيل الصوت المناسب
             appState.totalStats.totalAnswered++; if (isCorrect) appState.totalStats.correct++; else appState.totalStats.wrong++;
+            
+            // حفظ في التقرير
+            appState.history.push({ question: q.question, type: q.type, userAnswer: userAnsText, correctAnswer: correctAnsText, status: statusType });
+
             const feedbackArea = document.getElementById('feedbackArea'); const feedbackContent = document.getElementById('feedbackContent'); feedbackContent.innerHTML = feedbackHtml; feedbackArea.classList.remove('hidden'); setTimeout(() => feedbackArea.classList.add('open'), 10); document.getElementById('nextBtnContainer').classList.remove('hidden');
         }
         function nextQuestion() { if (appState.currentIdx < appState.queue.length - 1) { appState.currentIdx++; loadQuestion(); } else { finishSection(); } }
-        function finishSection() { document.getElementById('quizArea').classList.add('hidden'); const remainingTypes = appState.currentExam.types.filter(t => !appState.completedTypes.includes(t)); if (remainingTypes.length > 0) { const nextType = remainingTypes[0]; const nextTitle = nextType === 'mcq' ? 'الأسئلة الاختيارية' : 'الأسئلة المقالية'; const btn = document.getElementById('continueBtn'); btn.innerText = `البدء في ${nextTitle}`; btn.onclick = () => startSection(nextType); document.getElementById('intermissionScreen').classList.remove('hidden'); } else { finishExam(true); } }
-        function finishExam(showResults) { document.getElementById('intermissionScreen').classList.add('hidden'); document.getElementById('resultsArea').classList.remove('hidden'); const { correct, wrong, totalAnswered } = appState.totalStats; let percentage = totalAnswered > 0 ? (correct / totalAnswered) * 100 : 0; document.getElementById('resTotal').innerText = totalAnswered; document.getElementById('resCorrect').innerText = correct; document.getElementById('resWrong').innerText = wrong; document.getElementById('resPercentageText').innerText = percentage.toFixed(1) + '%'; document.getElementById('resProgressBar').style.width = percentage + '%'; const pt = document.getElementById('resPercentageText'); if (percentage >= 85) pt.className = "text-3xl md:text-4xl font-bold text-green-600 dark:text-green-400"; else if (percentage >= 50) pt.className = "text-3xl md:text-4xl font-bold text-yellow-600 dark:text-yellow-400"; else pt.className = "text-3xl md:text-4xl font-bold text-red-600 dark:text-red-400"; }
+        function finishSection() { document.getElementById('quizArea').classList.add('hidden'); const remainingTypes = appState.currentExam.types.filter(t => !appState.completedTypes.includes(t)); if (remainingTypes.length > 0) { const nextType = remainingTypes[0]; const nextTitle = nextType === 'mcq' ? 'الأسئلة الاختيارية' : 'الأسئلة المقالية'; const btn = document.getElementById('continueBtn'); btn.innerText = `البدء في ${nextTitle}`; btn.onclick = () => startSection(nextType); document.getElementById('intermissionScreen').classList.remove('hidden'); } else { finishExam(); } }
+        
+        function finishExam() { 
+            document.getElementById('intermissionScreen').classList.add('hidden'); document.getElementById('resultsArea').classList.remove('hidden'); 
+            const { correct, wrong, totalAnswered } = appState.totalStats; let percentage = totalAnswered > 0 ? (correct / totalAnswered) * 100 : 0; 
+            document.getElementById('resTotal').innerText = totalAnswered; document.getElementById('resCorrect').innerText = correct; document.getElementById('resWrong').innerText = wrong; document.getElementById('resPercentageText').innerText = percentage.toFixed(1) + '%'; document.getElementById('resProgressBar').style.width = percentage + '%'; 
+            
+            // التقدير والتلوين
+            const badge = document.getElementById('gradeBadge'); const pt = document.getElementById('resPercentageText');
+            if (percentage >= 90) { badge.innerText = "🏆 ممتاز"; badge.className = "text-2xl font-bold mb-6 p-2 px-6 rounded-lg inline-block border-2 bg-green-100 border-green-500 text-green-700 dark:bg-green-900/30 dark:text-green-300"; pt.className = "block text-4xl font-bold mb-2 text-green-600 dark:text-green-400"; }
+            else if (percentage >= 80) { badge.innerText = "🌟 جيد جداً"; badge.className = "text-2xl font-bold mb-6 p-2 px-6 rounded-lg inline-block border-2 bg-blue-100 border-blue-500 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"; pt.className = "block text-4xl font-bold mb-2 text-blue-600 dark:text-blue-400"; }
+            else if (percentage >= 65) { badge.innerText = "👍 جيد"; badge.className = "text-2xl font-bold mb-6 p-2 px-6 rounded-lg inline-block border-2 bg-yellow-100 border-yellow-500 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300"; pt.className = "block text-4xl font-bold mb-2 text-yellow-600 dark:text-yellow-400"; }
+            else if (percentage >= 50) { badge.innerText = "✅ مقبول"; badge.className = "text-2xl font-bold mb-6 p-2 px-6 rounded-lg inline-block border-2 bg-orange-100 border-orange-500 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300"; pt.className = "block text-4xl font-bold mb-2 text-orange-600 dark:text-orange-400"; }
+            else { badge.innerText = "⚠️ ضعيف"; badge.className = "text-2xl font-bold mb-6 p-2 px-6 rounded-lg inline-block border-2 bg-red-100 border-red-500 text-red-700 dark:bg-red-900/30 dark:text-red-300"; pt.className = "block text-4xl font-bold mb-2 text-red-600 dark:text-red-400"; }
+
+            // بناء تقرير الإجابات المفصل
+            const reportContainer = document.getElementById('answersReportContainer'); reportContainer.innerHTML = '';
+            appState.history.forEach((item, index) => {
+                let statusIcon = item.status === 'correct' || item.status === 'excellent' ? '<i class="fa-solid fa-check-circle text-green-500"></i>' : item.status === 'acceptable' ? '<i class="fa-solid fa-check-circle text-blue-500"></i>' : item.status === 'incomplete' ? '<i class="fa-solid fa-triangle-exclamation text-yellow-500"></i>' : '<i class="fa-solid fa-xmark-circle text-red-500"></i>';
+                let borderCol = item.status === 'correct' || item.status === 'excellent' ? 'border-green-200 dark:border-green-900/50' : item.status === 'acceptable' ? 'border-blue-200 dark:border-blue-900/50' : item.status === 'incomplete' ? 'border-yellow-200 dark:border-yellow-900/50' : 'border-red-200 dark:border-red-900/50';
+                
+                let cardHtml = `<div class="p-4 rounded-xl border ${borderCol} bg-gray-50 dark:bg-neutral-900/50 relative">`;
+                cardHtml += `<div class="absolute top-4 left-4 text-xl">${statusIcon}</div>`;
+                cardHtml += `<div class="text-xs text-gray-400 font-bold mb-1">سؤال ${index + 1} (${item.type === 'mcq' ? 'اختياري' : 'مقالي'})</div>`;
+                cardHtml += `<h4 class="text-sm md:text-base font-bold text-gray-800 dark:text-neutral-200 mb-3 ml-6 leading-relaxed">${item.question}</h4>`;
+                cardHtml += `<div class="text-sm"><span class="font-bold text-gray-500 dark:text-gray-400">إجابتك:</span> <span class="${item.status === 'wrong' ? 'text-red-600 line-through' : 'text-gray-700 dark:text-gray-300'}">${item.userAnswer}</span></div>`;
+                
+                // إظهار الإجابة النموذجية دائماً في المقالي، وفي الاختياري فقط إذا أخطأ
+                if (item.type === 'essay' || item.status === 'wrong' || item.status === 'incomplete') {
+                    cardHtml += `<div class="text-sm mt-2 p-2 bg-white dark:bg-neutral-950 rounded border border-gray-100 dark:border-neutral-800"><span class="font-bold text-green-600 dark:text-green-500">الإجابة الصحيحة:</span> <span class="text-gray-700 dark:text-gray-300">${item.correctAnswer}</span></div>`;
+                }
+                cardHtml += `</div>`;
+                reportContainer.innerHTML += cardHtml;
+            });
+        }
+        
         function calculateSimilarity(str1, str2) { const clean = (str) => str.toLowerCase().replace(/[^\u0621-\u064A0-9a-z\s]/g, '').replace(/\s+/g, ' ').trim(); const s1 = clean(str1), s2 = clean(str2); if (s1 === s2) return 1; if (s1.length < 2 || s2.length < 2) return 0; const getBigrams = (str) => { const bigrams = new Map(); for (let i = 0; i < str.length - 1; i++) { const bigram = str.substring(i, i + 2); bigrams.set(bigram, (bigrams.get(bigram) || 0) + 1); } return bigrams; }; const bigrams1 = getBigrams(s1), bigrams2 = getBigrams(s2); let intersection = 0; for (const [key, val] of bigrams1) { if (bigrams2.has(key)) intersection += Math.min(val, bigrams2.get(key)); } return (2 * intersection) / ((s1.length - 1) + (s2.length - 1)); }
     </script>
 </body>
