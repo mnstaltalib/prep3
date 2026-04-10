@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كبسولة المنهج - منصة الطالب</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { fontFamily: { sans: ['Cairo', 'sans-serif'] } } }
+        }
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <style>
+        main {
+            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-neutral-900 dark:text-neutral-100 transition-colors duration-300 flex flex-col min-h-screen text-sm md:text-base">
+
+    <div id="navbar-container"></div>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-12">
+        
+        <div id="moduleLockedScreen" class="hidden max-w-2xl mx-auto text-center py-20 bg-white dark:bg-neutral-800 rounded-3xl shadow-xl border dark:border-neutral-700 fade-in">
+            <div class="mb-6 animate-bounce">
+                <i class="fa-solid fa-lock text-6xl text-gray-400 dark:text-gray-600"></i>
+            </div>
+            <h1 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">القسم مغلق حالياً</h1>
+            <p id="moduleLockMessage" class="text-gray-500 dark:text-gray-400 text-lg mb-8 px-8">نعتذر، هذا القسم يخضع للتحديثات. يرجى المحاولة لاحقاً.</p>
+            <a href="index.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg transition-transform hover:-translate-y-1">
+                العودة للرئيسية
+            </a>
+        </div>
+
+        <div id="mainContent" class="max-w-4xl mx-auto bg-white dark:bg-neutral-800 p-8 rounded-2xl shadow-lg border dark:border-neutral-700 overflow-hidden relative min-h-[450px] fade-in">
+            
+            <header class="text-center mb-8">
+                <h1 class="text-3xl font-bold mb-2 text-blue-600 dark:text-blue-400">كبسولة المنهج</h1>
+                <p class="text-gray-600 dark:text-neutral-400">ملخصات مركزة ومراجعات نهائية.. طريقك للدرجة النهائية.</p>
+            </header>
+            
+            <div class="text-center">
+                <h2 class="text-xl font-bold mb-6">اختر المادة الدراسية:</h2>
+                
+                <div class="flex flex-wrap justify-center gap-4 max-w-3xl mx-auto">
+                    
+                    <div onclick="navigateToSummary('عربي', 'summaries/arabic.html')" class="w-full sm:w-48 p-6 bg-green-50 dark:bg-neutral-700 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-xl border border-green-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm flex flex-col items-center justify-center text-center group cursor-pointer">
+                        <i class="fa-solid fa-book text-3xl text-green-600 mb-2 block group-hover:scale-110 transition-transform"></i>
+                        <span class="font-bold text-gray-800 dark:text-neutral-200">لغة عربية</span>
+                    </div>
+
+                    <div onclick="navigateToSummary('علوم', 'summaries/science.html')" class="w-full sm:w-48 p-6 bg-purple-50 dark:bg-neutral-700 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded-xl border border-purple-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm flex flex-col items-center justify-center text-center group cursor-pointer">
+                        <i class="fa-solid fa-flask text-3xl text-purple-600 mb-2 block group-hover:scale-110 transition-transform"></i>
+                        <span class="font-bold text-gray-800 dark:text-neutral-200">علوم</span>
+                    </div>
+
+                    <div onclick="navigateToSummary('دراسات', 'summaries/social.html')" class="w-full sm:w-48 p-6 bg-yellow-50 dark:bg-neutral-700 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 rounded-xl border border-yellow-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm flex flex-col items-center justify-center text-center group cursor-pointer">
+                        <i class="fa-solid fa-globe text-3xl text-yellow-600 mb-2 block group-hover:scale-110 transition-transform"></i>
+                        <span class="font-bold text-gray-800 dark:text-neutral-200">دراسات</span>
+                    </div>
+
+                    <div onclick="navigateToSummary('رياضيات', 'summaries/math.html')" class="w-full sm:w-48 p-6 bg-blue-50 dark:bg-neutral-700 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-xl border border-blue-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm flex flex-col items-center justify-center text-center group cursor-pointer">
+                        <i class="fa-solid fa-calculator text-3xl text-blue-600 mb-2 block group-hover:scale-110 transition-transform"></i>
+                        <span class="font-bold text-gray-800 dark:text-neutral-200">رياضيات</span>
+                    </div>
+
+                    <div onclick="navigateToSummary('انجليزي', 'summaries/english.html')" class="w-full sm:w-48 p-6 bg-red-50 dark:bg-neutral-700 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-xl border border-red-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm flex flex-col items-center justify-center text-center group cursor-pointer">
+                        <i class="fa-solid fa-language text-3xl text-red-600 mb-2 block group-hover:scale-110 transition-transform"></i>
+                        <span class="font-bold text-gray-800 dark:text-neutral-200">إنجليزي</span>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <div id="footer-container"></div>
+    <script src="layout.js"></script>
+
+    <script>
+        // =========================================================================
+        // ⚙️ إعدادات النظام والقفل (System Configuration)
+        // =========================================================================
+        const systemConfig = {
+            // 1. القفل العام لكبسولة المنهج
+            isModuleLocked: true, 
+            moduleLockMessage: "نعتذر، قسم الملخصات تحت التحضير حالياً.",
+
+            // 2. إعدادات المواد
+            subjects: {
+                'عربي': { locked: false, message: "ملخصات العربي قيد التجهيز." },
+                'علوم': { locked: false, message: "ملخصات العلوم قيد التجهيز." },
+                'دراسات': { locked: false, message: "" },
+                'رياضيات': { locked: false, message: "" },
+                'انجليزي': { locked: false, message: "" }
+            }
+        };
+
+        // --- التحقق من القفل عند التحميل ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (systemConfig.isModuleLocked) {
+                document.getElementById('mainContent').classList.add('hidden');
+                const lockScreen = document.getElementById('moduleLockedScreen');
+                document.getElementById('moduleLockMessage').innerText = systemConfig.moduleLockMessage;
+                lockScreen.classList.remove('hidden');
+            }
+        });
+
+        // --- دالة التنقل الآمنة ---
+        function navigateToSummary(subject, url) {
+            const config = systemConfig.subjects[subject];
+            
+            if (config && config.locked) {
+                alert("🔒 " + config.message);
+                return;
+            }
+
+            // إذا لم تكن مغلقة، اذهب للرابط
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المكتبة الرقمية - منصة الطالب</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // إعدادات Tailwind
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { fontFamily: { sans: ['Cairo', 'sans-serif'] } } }
+        }
+
+        // --- كود منع الوميض (يجب أن يكون هنا في الرأس) ---
+        // يتحقق فوراً قبل تحميل الصفحة
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+<style>
+    /* نطبق الانميشن على المحتوى الرئيسي فقط وليس الصفحة كلها */
+    main {
+        animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0; /* يبدأ مخفي */
+        transform: translateY(20px); /* يبدأ من الأسفل قليلاً */
+    }
+
+    @keyframes slideUpFade {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* كلاسات مساعدة أخرى */
+    .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    .fade-out { animation: fadeOut 0.3s ease-in forwards; }
+    .expand-wrapper { max-height: 0; overflow: hidden; transition: all 0.5s; }
+    .expand-wrapper.open { max-height: 1000px; }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-neutral-900 dark:text-neutral-100 transition-colors duration-300 flex flex-col min-h-screen text-sm md:text-base">
+
+    <div id="navbar-container"></div>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-12">
+        
+        <header class="text-center mb-10">
+            <h1 class="text-3xl font-bold mb-4 text-blue-600 dark:text-blue-400">المكتبة الرقمية</h1>
+            <p class="text-gray-600 dark:text-neutral-400">جميع الملفات والشروحات مرتبة حسب المادة.</p>
+        </header>
+
+        <div class="bg-white dark:bg-neutral-800 p-6 rounded-2xl shadow-lg mb-8 max-w-4xl mx-auto border dark:border-neutral-700">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                
+                <div class="md:col-span-2 relative">
+                    <input type="text" id="searchInput" placeholder="ابحث عن اسم الملف..." 
+                        class="w-full p-3 pr-10 rounded-xl bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+                    <i class="fa-solid fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+
+                <div>
+                    <select id="subjectSelect" 
+                        class="w-full p-3 rounded-xl bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors cursor-pointer">
+                        <option value="all">كل المواد</option>
+                        <option value="عربي">لغة عربية</option>
+                        <option value="علوم">علوم</option>
+                        <option value="دراسات">دراسات اجتماعية</option>
+                        <option value="رياضيات">رياضيات</option>
+                        <option value="انجليزي">لغة إنجليزية</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            </div>
+
+        <div id="noResults" class="hidden text-center py-12">
+            <i class="fa-regular fa-folder-open text-6xl text-gray-300 dark:text-neutral-600 mb-4"></i>
+            <p class="text-gray-500 dark:text-neutral-400">لا توجد ملفات تطابق بحثك.</p>
+        </div>
+
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="data/library.js"></script>
+    <script src="layout.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const subjectSelect = document.getElementById('subjectSelect');
+            const resultsGrid = document.getElementById('resultsGrid');
+            const noResults = document.getElementById('noResults');
+
+            // دالة للحصول على لون وأيقونة المادة
+            function getSubjectStyle(subject) {
+                const styles = {
+                    'عربي': { color: 'text-green-600', bg: 'bg-green-100 dark:bg-green-900/30', icon: 'fa-book' },
+                    'علوم': { color: 'text-purple-600', bg: 'bg-purple-100 dark:bg-purple-900/30', icon: 'fa-flask' },
+                    'دراسات': { color: 'text-yellow-600', bg: 'bg-yellow-100 dark:bg-yellow-900/30', icon: 'fa-globe' },
+                    'رياضيات': { color: 'text-blue-600', bg: 'bg-blue-100 dark:bg-blue-900/30', icon: 'fa-calculator' },
+                    'انجليزي': { color: 'text-red-600', bg: 'bg-red-100 dark:bg-red-900/30', icon: 'fa-language' }
+                };
+                return styles[subject] || { color: 'text-gray-600', bg: 'bg-gray-100', icon: 'fa-file' };
+            }
+
+            // دالة عرض البيانات
+            function renderLibrary() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedSubject = subjectSelect.value;
+
+                // فلترة البيانات
+                // نستخدم window.libraryData المعرفة في ملف data/library.js
+                const filteredData = (window.libraryData || []).filter(item => {
+                    const matchesSearch = item.title.toLowerCase().includes(searchTerm);
+                    const matchesSubject = selectedSubject === 'all' || item.subject === selectedSubject;
+                    return matchesSearch && matchesSubject;
+                });
+
+                // مسح المحتوى الحالي
+                resultsGrid.innerHTML = '';
+
+                if (filteredData.length === 0) {
+                    noResults.classList.remove('hidden');
+                } else {
+                    noResults.classList.add('hidden');
+                    
+                    filteredData.forEach(item => {
+                        const style = getSubjectStyle(item.subject);
+                        
+                        const card = document.createElement('div');
+                        card.className = 'bg-white dark:bg-neutral-800 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden border border-gray-100 dark:border-neutral-700 flex flex-col';
+                        
+                        card.innerHTML = `
+                            <div class="p-6 flex-grow">
+                                <div class="flex justify-between items-start mb-4">
+                                    <span class="${style.bg} ${style.color} text-xs font-bold px-3 py-1 rounded-full">
+                                        <i class="fa-solid ${style.icon} ml-1"></i> ${item.subject}
+                                    </span>
+                                    <span class="text-xs text-gray-400 bg-gray-50 dark:bg-neutral-700 px-2 py-1 rounded border dark:border-neutral-600">${item.term}</span>
+                                </div>
+                                <h3 class="text-lg font-bold mb-2 text-gray-800 dark:text-neutral-100 line-clamp-2">${item.title}</h3>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-neutral-900/50 px-6 py-4 border-t dark:border-neutral-700 flex justify-between items-center mt-auto">
+                                <a href="${item.link}" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-semibold text-sm flex items-center gap-2 transition-colors">
+                                    <i class="fa-solid fa-download"></i> تحميل / عرض
+                                </a>
+                                <i class="fa-regular fa-file-pdf text-red-500 text-lg"></i>
+                            </div>
+                        `;
+                        resultsGrid.appendChild(card);
+                    });
+                }
+            }
+
+            // الاستماع للأحداث
+            searchInput.addEventListener('input', renderLibrary);
+            subjectSelect.addEventListener('change', renderLibrary);
+
+            // العرض الأولي
+            renderLibrary();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بنك الأسئلة - منصة الطالب</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { fontFamily: { sans: ['Cairo', 'sans-serif'] } } }
+        }
+        
+        // منع وميض الوضع الليلي
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <style>
+        /* --- الانميشن الموحد (Slide Up Fade) --- */
+        main {
+            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes slideUpFade {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* انميشن العناصر الداخلية */
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        .fade-out { animation: fadeOut 0.3s ease-in forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+        /* انميشن التمدد للإجابة */
+        .expand-wrapper {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .expand-wrapper.open {
+            max-height: 800px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* انميشن زر التالي */
+        .pop-in-btn { animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-neutral-900 dark:text-neutral-100 transition-colors duration-300 flex flex-col min-h-screen text-sm md:text-base">
+
+    <div id="navbar-container"></div>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-12">
+        
+        <div id="moduleLockedScreen" class="hidden max-w-2xl mx-auto text-center py-20 bg-white dark:bg-neutral-800 rounded-3xl shadow-xl border dark:border-neutral-700">
+            <div class="mb-6 animate-bounce">
+                <i class="fa-solid fa-lock text-6xl text-gray-400 dark:text-gray-600"></i>
+            </div>
+            <h1 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">القسم مغلق حالياً</h1>
+            <p id="moduleLockMessage" class="text-gray-500 dark:text-gray-400 text-lg mb-8 px-8">نعتذر، بنك الأسئلة يخضع للصيانة الدورية. يرجى المحاولة في وقت لاحق.</p>
+            <a href="index.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg transition-transform hover:-translate-y-1">
+                العودة للرئيسية
+            </a>
+        </div>
+
+        <div id="setupWizard" class="max-w-4xl mx-auto bg-white dark:bg-neutral-800 p-6 md:p-8 rounded-2xl shadow-lg border dark:border-neutral-700 overflow-hidden relative min-h-[450px]">
+            <header class="text-center mb-8">
+                <h1 class="text-2xl md:text-3xl font-bold mb-2 text-blue-600 dark:text-blue-400">بنك الأسئلة الذكي</h1>
+                <p class="text-gray-600 dark:text-neutral-400 text-sm md:text-base">نظام تدريب متطور يعتمد على تقييم إجابتك بدقة.</p>
+            </header>
+            
+            <div id="stepSubject" class="text-center fade-in">
+                <h2 class="text-lg md:text-xl font-bold mb-6">اختر المادة الدراسية:</h2>
+                
+                <div class="flex flex-wrap justify-center gap-4 max-w-3xl mx-auto" id="subjectsContainer">
+                    <button onclick="selectSubject('عربي')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-green-50 dark:bg-neutral-700 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-xl border border-green-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm">
+                        <i class="fa-solid fa-book text-2xl md:text-3xl text-green-600 mb-2 block"></i>
+                        <span class="font-bold">لغة عربية</span>
+                    </button>
+
+                    <button onclick="selectSubject('علوم')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-purple-50 dark:bg-neutral-700 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded-xl border border-purple-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm">
+                        <i class="fa-solid fa-flask text-2xl md:text-3xl text-purple-600 mb-2 block"></i>
+                        <span class="font-bold">علوم</span>
+                    </button>
+
+                    <button onclick="selectSubject('دراسات')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-yellow-50 dark:bg-neutral-700 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 rounded-xl border border-yellow-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm">
+                        <i class="fa-solid fa-globe text-2xl md:text-3xl text-yellow-600 mb-2 block"></i>
+                        <span class="font-bold">دراسات</span>
+                    </button>
+
+                    <button onclick="selectSubject('رياضيات')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-blue-50 dark:bg-neutral-700 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-xl border border-blue-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm">
+                        <i class="fa-solid fa-calculator text-2xl md:text-3xl text-blue-600 mb-2 block"></i>
+                        <span class="font-bold">رياضيات</span>
+                    </button>
+
+                    <button onclick="selectSubject('انجليزي')" class="subject-btn w-full sm:w-48 p-4 md:p-6 bg-red-50 dark:bg-neutral-700 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-xl border border-red-200 dark:border-neutral-600 transition-all hover:-translate-y-1 shadow-sm">
+                        <i class="fa-solid fa-language text-2xl md:text-3xl text-red-600 mb-2 block"></i>
+                        <span class="font-bold">إنجليزي</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="stepType" class="hidden text-center">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-lg md:text-xl font-bold">اختر نوع الأسئلة:</h2>
+                    <button onclick="backToStep('stepSubject')" class="text-sm text-gray-400 hover:text-blue-500 transition-colors"><i class="fa-solid fa-arrow-right"></i> عودة</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <button id="btn-mcq" onclick="selectType('mcq')" class="p-6 md:p-8 border-2 border-dashed border-blue-300 dark:border-blue-700 hover:bg-blue-50 dark:hover:bg-neutral-700 rounded-xl transition-all group relative overflow-hidden">
+                        <div class="content-wrapper">
+                            <i class="fa-solid fa-list-check text-3xl md:text-4xl text-blue-500 mb-4 group-hover:scale-110 transition-transform"></i>
+                            <h3 class="text-lg md:text-xl font-bold">أسئلة اختيارية</h3>
+                            <p class="text-xs md:text-sm text-gray-500 mt-2">اختبر نفسك بسرعة</p>
+                        </div>
+                    </button>
+
+                    <button id="btn-essay" onclick="selectType('essay')" class="p-6 md:p-8 border-2 border-dashed border-green-300 dark:border-green-700 hover:bg-green-50 dark:hover:bg-neutral-700 rounded-xl transition-all group relative overflow-hidden">
+                        <div class="content-wrapper">
+                            <i class="fa-solid fa-pen-nib text-3xl md:text-4xl text-green-500 mb-4 group-hover:scale-110 transition-transform"></i>
+                            <h3 class="text-lg md:text-xl font-bold">أسئلة مقالية</h3>
+                            <p class="text-xs md:text-sm text-gray-500 mt-2">اكتب إجابتك وسنصححها لك</p>
+                        </div>
+                    </button>
+
+                </div>
+            </div>
+
+            <div id="stepLesson" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-lg md:text-xl font-bold">حدد الدروس:</h2>
+                    <button onclick="backToStep('stepType')" class="text-sm text-gray-400 hover:text-blue-500 transition-colors"><i class="fa-solid fa-arrow-right"></i> عودة</button>
+                </div>
+                
+                <div id="lessonsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8 max-h-60 overflow-y-auto custom-scrollbar"></div>
+                
+                <div class="flex justify-between items-center border-t dark:border-neutral-700 pt-6">
+                    <label class="flex items-center gap-2 cursor-pointer select-none group">
+                        <input type="checkbox" id="selectAll" class="w-5 h-5 rounded text-blue-600 cursor-pointer">
+                        <span class="font-bold group-hover:text-blue-600 transition-colors text-sm md:text-base">تحديد الكل</span>
+                    </label>
+                    <button onclick="startQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-2 md:py-3 rounded-xl font-bold shadow-lg transition-transform hover:-translate-y-1 text-sm md:text-base">
+                        بدء التدريب <i class="fa-solid fa-play mr-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="quizArea" class="hidden max-w-3xl mx-auto fade-in">
+            <div class="flex justify-between items-center mb-6 bg-white dark:bg-neutral-800 p-4 rounded-xl border-b-4 border-blue-500 shadow-sm">
+                <div class="flex items-center gap-4">
+                    <span class="font-bold text-gray-700 dark:text-neutral-200 text-sm md:text-base">
+                        السؤال: <span id="qCurrent" class="text-blue-600">1</span> / <span id="qTotal">10</span>
+                    </span>
+                    <span class="text-xs bg-gray-100 dark:bg-neutral-700 px-2 py-1 rounded font-bold text-blue-600" id="subjectNameBadge"></span>
+                </div>
+                <button onclick="finishQuiz()" class="text-xs md:text-sm bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-3 md:px-4 py-2 rounded-lg hover:bg-red-100 transition-colors">
+                    <i class="fa-solid fa-flag-checkered"></i> إنهاء
+                </button>
+            </div>
+
+            <div id="activeQuestionContainer" class="bg-white dark:bg-neutral-800 p-6 md:p-8 rounded-2xl shadow-lg border dark:border-neutral-700 relative transition-all duration-500"></div>
+
+            <div id="nextBtnWrapper" class="expand-wrapper mt-4 text-center">
+                <button id="nextBtn" onclick="nextQuestion()" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-10 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105">
+                    السؤال التالي <i class="fa-solid fa-arrow-left mr-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="resultsArea" class="hidden max-w-2xl mx-auto text-center fade-in bg-white dark:bg-neutral-800 p-8 rounded-2xl shadow-xl border dark:border-neutral-700">
+            <div class="mb-6">
+                <div class="inline-block p-4 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 mb-4">
+                    <i class="fa-solid fa-trophy text-5xl"></i>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">نتيجة التدريب</h2>
+            </div>
+            <div class="grid grid-cols-3 gap-4 mb-8">
+                <div class="p-4 bg-gray-50 dark:bg-neutral-900 rounded-xl">
+                    <span class="block text-gray-500 text-xs md:text-sm mb-1">المجاب</span>
+                    <span id="resAnswered" class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">0</span>
+                </div>
+                <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
+                    <span class="block text-green-600 text-xs md:text-sm mb-1">صحيح</span>
+                    <span id="resCorrect" class="text-xl md:text-2xl font-bold text-green-600">0</span>
+                </div>
+                <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl">
+                    <span class="block text-red-600 text-xs md:text-sm mb-1">خطأ</span>
+                    <span id="resWrong" class="text-xl md:text-2xl font-bold text-red-600">0</span>
+                </div>
+            </div>
+            <div class="mb-8">
+                <div class="text-sm text-gray-500 mb-2">النسبة المئوية</div>
+                <div class="relative pt-1">
+                    <div class="flex mb-2 items-center justify-between">
+                        <span id="resPercentageText" class="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400">0%</span>
+                    </div>
+                    <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200 dark:bg-neutral-700">
+                        <div id="resProgressBar" style="width:0%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-1000"></div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="resetSetup()" class="bg-gray-800 hover:bg-gray-900 text-white px-8 py-3 rounded-xl font-bold shadow transition-transform hover:-translate-y-1">
+                بدء تدريب جديد <i class="fa-solid fa-rotate-right mr-2"></i>
+            </button>
+        </div>
+
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script>
+        window.questionsData = []; // تهيئة بنك الأسئلة الرئيسي
+
+        // دالة عامة تُنادى من داخل ملف كل مادة لتحويل البيانات ودمجها
+        window.addSubjectQuestions = function(subjectName, rawData) {
+            const formattedData = rawData.map(item => {
+                if (item[1] === 'mcq') {
+                    return { id: item[0], subject: subjectName, type: 'mcq', lesson: item[2], question: item[3], options: item[4], correctAnswer: item[5] };
+                } else if (item[1] === 'essay') {
+                    return { id: item[0], subject: subjectName, type: 'essay', lesson: item[2], question: item[3], correctAnswer: item[4] };
+                }
+                return null;
+            });
+            window.questionsData = window.questionsData.concat(formattedData.filter(q => q !== null));
+        };
+    </script>
+
+    <script src="data/questions/arabic.js"></script>
+    <script src="layout.js"></script>
+
+    <script>
+        // =========================================================================
+        // ⚙️ إعدادات النظام والقفل (System Configuration)
+        // عدل هذا الجزء للتحكم في الموقع
+        // =========================================================================
+        const systemConfig = {
+            // 1. القفل العام لبنك الأسئلة (Module Lock)
+            isModuleLocked: false, 
+            moduleLockMessage: "نعتذر، بنك الأسئلة يخضع للتحديثات حالياً. يرجى العودة لاحقاً.",
+
+            // 2. إعدادات المواد (Subjects)
+            subjects: {
+                'عربي': {
+                    locked: false, // قفل المادة بالكامل
+                    lockMessage: "مادة اللغة العربية مغلقة مؤقتاً.",
+                    grading: { excellent: 50, passing: 30, incomplete: 15 },
+                    types: {
+                        mcq: { locked: false, message: "الاختياري مغلق حالياً." },
+                        essay: { locked: false, message: "المقالي مغلق للتصحيح." } // <--- مثال: المقالي مغلق في العربي
+                    }
+                },
+                'علوم': {
+                    locked: false,
+                    lockMessage: "مادة العلوم مغلقة.",
+                    grading: { excellent: 50, passing: 30, incomplete: 15 },
+                    types: {
+                        mcq: { locked: false, message: "" },
+                        essay: { locked: false, message: "" }
+                    }
+                },
+                'دراسات': {
+                    locked: false,
+                    lockMessage: "",
+                    grading: { excellent: 50, passing: 30, incomplete: 15 },
+                    types: { mcq: { locked: false }, essay: { locked: false } }
+                },
+                'رياضيات': {
+                    locked: false,
+                    lockMessage: "",
+                    grading: { excellent: 50, passing: 30, incomplete: 15 },
+                    types: { mcq: { locked: false }, essay: { locked: false } }
+                },
+                'انجليزي': {
+                    locked: false,
+                    lockMessage: "",
+                    grading: { excellent: 50, passing: 30, incomplete: 15 },
+                    types: { mcq: { locked: false }, essay: { locked: false } }
+                }
+            }
+        };
+
+        // =========================================================================
+        // 🚀 بداية المنطق البرمجي (Application Logic)
+        // =========================================================================
+
+        let appState = { currentSubject: null, currentType: null, questionsQueue: [], currentIndex: 0, stats: { correct: 0, wrong: 0, totalAnswered: 0 } };
+
+        // --- تهيئة النظام (التحقق من القفل العام) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (systemConfig.isModuleLocked) {
+                document.getElementById('setupWizard').classList.add('hidden');
+                const lockScreen = document.getElementById('moduleLockedScreen');
+                document.getElementById('moduleLockMessage').innerText = systemConfig.moduleLockMessage;
+                lockScreen.classList.remove('hidden');
+                lockScreen.classList.add('fade-in');
+            }
+        });
+
+        // --- خوارزمية التشابه ---
+        function calculateSimilarity(str1, str2) {
+            const clean = (str) => str.toLowerCase().replace(/[^\u0621-\u064A0-9a-z\s]/g, '').replace(/\s+/g, ' ').trim();
+            const s1 = clean(str1), s2 = clean(str2);
+            if (s1 === s2) return 1; if (s1.length < 2 || s2.length < 2) return 0;
+            const getBigrams = (str) => {
+                const bigrams = new Map();
+                for (let i = 0; i < str.length - 1; i++) {
+                    const bigram = str.substring(i, i + 2);
+                    bigrams.set(bigram, (bigrams.get(bigram) || 0) + 1);
+                }
+                return bigrams;
+            };
+            const bigrams1 = getBigrams(s1), bigrams2 = getBigrams(s2);
+            let intersection = 0;
+            for (const [key, val] of bigrams1) { if (bigrams2.has(key)) intersection += Math.min(val, bigrams2.get(key)); }
+            return (2 * intersection) / ((s1.length - 1) + (s2.length - 1));
+        }
+
+        // --- دوال الانتقال ---
+        function transitionStep(currentId, nextId) {
+            const current = document.getElementById(currentId);
+            const next = document.getElementById(nextId);
+            current.classList.add('fade-out');
+            setTimeout(() => {
+                current.classList.add('hidden'); current.classList.remove('fade-out');
+                next.classList.remove('hidden'); next.classList.add('fade-in');
+            }, 300);
+        }
+
+        // --- 1. اختيار المادة (مع القفل) ---
+        function selectSubject(subject) {
+            const config = systemConfig.subjects[subject];
+            
+            // التحقق من قفل المادة
+            if (config && config.locked) {
+                alert("🔒 " + config.lockMessage);
+                return;
+            }
+
+            appState.currentSubject = subject;
+            updateTypeButtons(subject); // تحديث أزرار النوع بناءً على القفل
+            transitionStep('stepSubject', 'stepType');
+        }
+
+        // --- دالة تحديث أزرار النوع (Lock Logic) ---
+        function updateTypeButtons(subject) {
+            const config = systemConfig.subjects[subject];
+            const types = ['mcq', 'essay'];
+            
+            types.forEach(type => {
+                const btn = document.getElementById(`btn-${type}`);
+                if (!btn) return;
+
+                // استعادة الحالة الأصلية أولاً (لتجنب تراكم التعديلات)
+                btn.disabled = false;
+                btn.className = type === 'mcq' 
+                    ? 'p-6 md:p-8 border-2 border-dashed border-blue-300 dark:border-blue-700 hover:bg-blue-50 dark:hover:bg-neutral-700 rounded-xl transition-all group relative overflow-hidden'
+                    : 'p-6 md:p-8 border-2 border-dashed border-green-300 dark:border-green-700 hover:bg-green-50 dark:hover:bg-neutral-700 rounded-xl transition-all group relative overflow-hidden';
+                
+                // إعادة المحتوى الأصلي (نستخدم innerHTML مخزن أو نعيد بناؤه)
+                // للتبسيط، نعيد بناء المحتوى الصحيح
+                if (type === 'mcq') {
+                    btn.innerHTML = `<div class="content-wrapper"><i class="fa-solid fa-list-check text-3xl md:text-4xl text-blue-500 mb-4 group-hover:scale-110 transition-transform"></i><h3 class="text-lg md:text-xl font-bold">أسئلة اختيارية</h3><p class="text-xs md:text-sm text-gray-500 mt-2">اختبر نفسك بسرعة</p></div>`;
+                } else {
+                    btn.innerHTML = `<div class="content-wrapper"><i class="fa-solid fa-pen-nib text-3xl md:text-4xl text-green-500 mb-4 group-hover:scale-110 transition-transform"></i><h3 class="text-lg md:text-xl font-bold">أسئلة مقالية</h3><p class="text-xs md:text-sm text-gray-500 mt-2">اكتب إجابتك وسنصححها لك</p></div>`;
+                }
+
+                // تطبيق القفل إذا كان مفعلاً
+                if (config.types[type] && config.types[type].locked) {
+                    btn.disabled = true;
+                    // ستايل القفل (رمادي وباهت)
+                    btn.className = 'p-6 md:p-8 border-2 border-dashed border-gray-300 dark:border-neutral-600 bg-gray-50 dark:bg-neutral-800 rounded-xl cursor-not-allowed opacity-70';
+                    btn.innerHTML = `
+                        <div class="content-wrapper">
+                            <i class="fa-solid fa-lock text-3xl md:text-4xl text-gray-400 mb-4"></i>
+                            <h3 class="text-lg md:text-xl font-bold text-gray-500">مغلق مؤقتاً</h3>
+                            <p class="text-xs md:text-sm text-gray-400 mt-2">${config.types[type].message}</p>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        function selectType(type) { 
+            appState.currentType = type; 
+            renderLessons(appState.currentSubject, type); 
+            transitionStep('stepType', 'stepLesson'); 
+        }
+
+        function backToStep(targetId) {
+            ['stepSubject', 'stepType', 'stepLesson'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById(targetId).classList.remove('hidden'); document.getElementById(targetId).classList.add('fade-in');
+        }
+
+        function renderLessons(subject, type) {
+            const container = document.getElementById('lessonsContainer'); container.innerHTML = '';
+            const filteredQuestions = window.questionsData.filter(q => q.subject === subject && q.type === type);
+            const lessons = new Set(filteredQuestions.map(q => q.lesson));
+            if (lessons.size === 0) { container.innerHTML = '<p class="text-red-500 col-span-2 text-center">لا توجد أسئلة متاحة لهذه المادة.</p>'; return; }
+            lessons.forEach(lesson => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center bg-gray-50 dark:bg-neutral-900 p-3 rounded-lg border border-gray-200 dark:border-neutral-700';
+                div.innerHTML = `<input type="checkbox" value="${lesson}" class="lesson-checkbox w-5 h-5 text-blue-600 rounded focus:ring-blue-500 cursor-pointer"><span class="mr-3 text-gray-700 dark:text-neutral-300 font-medium text-sm md:text-base">${lesson}</span>`;
+                container.appendChild(div);
+            });
+            const selectAllBtn = document.getElementById('selectAll'); selectAllBtn.checked = false;
+            selectAllBtn.onclick = function() { document.querySelectorAll('.lesson-checkbox').forEach(cb => cb.checked = this.checked); };
+        }
+
+        function resetSetup() {
+            ['quizArea', 'resultsArea', 'stepType', 'stepLesson'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            const stepSubject = document.getElementById('stepSubject');
+            stepSubject.classList.remove('hidden'); stepSubject.classList.add('fade-in');
+            document.getElementById('setupWizard').classList.remove('hidden');
+            appState = { ...appState, currentIndex: 0, stats: { correct: 0, wrong: 0, totalAnswered: 0 } };
+        }
+
+        function startQuiz() {
+            const checkboxes = document.querySelectorAll('.lesson-checkbox:checked');
+            const selectedLessons = Array.from(checkboxes).map(cb => cb.value);
+            if (selectedLessons.length === 0) { alert('المرجو اختيار درس واحد على الأقل!'); return; }
+            let filteredQuestions = window.questionsData.filter(q => q.subject === appState.currentSubject && q.type === appState.currentType && selectedLessons.includes(q.lesson));
+            appState.questionsQueue = shuffleArray(filteredQuestions);
+            appState.totalQuestions = filteredQuestions.length;
+            if (appState.totalQuestions === 0) return;
+            document.getElementById('setupWizard').classList.add('hidden'); document.getElementById('quizArea').classList.remove('hidden');
+            document.getElementById('subjectNameBadge').innerText = appState.currentSubject;
+            document.getElementById('qTotal').innerText = appState.totalQuestions;
+            showQuestion(0);
+        }
+
+        function showQuestion(index) {
+            const q = appState.questionsQueue[index];
+            appState.currentIndex = index;
+            document.getElementById('qCurrent').innerText = index + 1;
+            const nextWrapper = document.getElementById('nextBtnWrapper');
+            nextWrapper.classList.remove('open');
+            document.getElementById('nextBtn').classList.remove('pop-in-btn');
+
+            const container = document.getElementById('activeQuestionContainer');
+            container.innerHTML = `
+                <div class="mb-2 text-xs text-gray-400 font-bold">${q.lesson}</div>
+                <h3 class="text-lg md:text-2xl font-bold mb-8 text-gray-900 dark:text-neutral-100 leading-relaxed text-center fade-in">${q.question}</h3>
+                <div id="interactionArea" class="fade-in">${getInteractionHTML(q)}</div>
+                <div id="feedbackWrapper" class="expand-wrapper mt-6">
+                    <div id="feedbackContent" class="p-4 rounded-xl text-sm"></div>
+                </div>
+            `;
+        }
+
+        function getInteractionHTML(q) {
+            if (q.type === 'mcq') {
+                return `<div class="grid grid-cols-1 gap-4 max-w-xl mx-auto">${q.options.map((opt, i) => `<button onclick="handleAnswer('mcq', ${i}, this)" class="option-btn w-full text-right p-4 rounded-xl border-2 border-gray-100 dark:border-neutral-600 hover:border-blue-200 dark:hover:border-blue-800 hover:bg-blue-50 dark:hover:bg-neutral-700 transition-all font-semibold text-gray-700 dark:text-neutral-300 text-sm md:text-base"><span class="ml-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 dark:bg-neutral-600 text-xs">${i+1}</span> ${opt}</button>`).join('')}</div>`;
+            } else {
+                return `<div class="max-w-xl mx-auto"><textarea id="essayInput" rows="4" class="w-full p-4 rounded-xl bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-600 focus:ring-2 focus:ring-blue-500 focus:outline-none mb-4 text-sm md:text-base" placeholder="اكتب إجابتك هنا..."></textarea><button onclick="handleAnswer('essay')" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold shadow transition-colors text-sm md:text-base">تحقق من الإجابة</button></div>`;
+            }
+        }
+
+        function handleAnswer(type, selectedValue, btnElement) {
+            const q = appState.questionsQueue[appState.currentIndex];
+            const feedbackWrapper = document.getElementById('feedbackWrapper');
+            const feedbackContent = document.getElementById('feedbackContent');
+            let isCorrect = false;
+
+            if (type === 'mcq') {
+                document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+                if (selectedValue === q.correctAnswer) {
+                    isCorrect = true;
+                    btnElement.classList.remove('border-gray-100', 'dark:border-neutral-600');
+                    btnElement.classList.add('bg-green-100', 'dark:bg-green-900/40', 'border-green-500', 'dark:border-green-500', 'text-green-800', 'dark:text-green-200');
+                } else {
+                    btnElement.classList.remove('border-gray-100', 'dark:border-neutral-600');
+                    btnElement.classList.add('bg-red-100', 'dark:bg-red-900/40', 'border-red-500', 'dark:border-red-500', 'text-red-800', 'dark:text-red-200');
+                    const correctBtn = document.querySelectorAll('.option-btn')[q.correctAnswer];
+                    correctBtn.classList.remove('border-gray-100', 'dark:border-neutral-600');
+                    correctBtn.classList.add('bg-green-50', 'dark:bg-green-900/20', 'border-green-500', 'dark:border-green-500');
+                }
+            } 
+            else if (type === 'essay') {
+                const input = document.getElementById('essayInput');
+                const userText = input.value.trim();
+                input.disabled = true;
+                if (!userText) { alert('اكتب إجابة!'); input.disabled = false; return; }
+
+                const similarity = calculateSimilarity(userText, q.correctAnswer);
+                const score = Math.round(similarity * 100);
+                
+                // جلب إعدادات المادة الحالية من الكونفج
+                const settings = systemConfig.subjects[appState.currentSubject].grading;
+
+                let feedbackText = "", feedbackClass = "", icon = "";
+
+                if (score > settings.excellent) {
+                    isCorrect = true;
+                    feedbackText = "إجابة ممتازة";
+                    feedbackClass = "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-700 dark:text-green-300";
+                    icon = "fa-star";
+                } else if (score > settings.passing) {
+                    isCorrect = true;
+                    feedbackText = "إجابة مقبولة";
+                    feedbackClass = "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300";
+                    icon = "fa-check";
+                } else if (score > settings.incomplete) {
+                    isCorrect = false;
+                    feedbackText = "إجابة ناقصة";
+                    feedbackClass = "bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-700 dark:text-yellow-300";
+                    icon = "fa-triangle-exclamation";
+                } else {
+                    isCorrect = false;
+                    feedbackText = "إجابة خاطئة";
+                    feedbackClass = "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300";
+                    icon = "fa-xmark";
+                }
+
+                feedbackContent.innerHTML = `
+                    <div class="font-bold text-lg mb-2 flex items-center gap-2 ${feedbackClass.split(' ').pop()}">
+                        <i class="fa-solid ${icon}"></i> ${feedbackText}
+                    </div>
+                    <div class="mt-3 bg-white dark:bg-neutral-950 p-4 rounded-lg border border-gray-200 dark:border-neutral-700">
+                        <span class="block text-xs text-gray-400 mb-1 font-bold">الإجابة النموذجية:</span>
+                        <p class="text-gray-800 dark:text-neutral-200 leading-relaxed">${q.correctAnswer}</p>
+                    </div>
+                `;
+                feedbackContent.className = `p-4 rounded-xl border ${feedbackClass}`;
+                feedbackWrapper.classList.add('open');
+            }
+
+            appState.stats.totalAnswered++;
+            if (isCorrect) appState.stats.correct++; else appState.stats.wrong++;
+
+            document.getElementById('nextBtnWrapper').classList.add('open');
+            document.getElementById('nextBtn').classList.add('pop-in-btn');
+        };
+
+        function nextQuestion() {
+            if (appState.currentIndex < appState.questionsQueue.length - 1) { showQuestion(appState.currentIndex + 1); } 
+            else { finishQuiz(); }
+        }
+
+        function finishQuiz() {
+            document.getElementById('quizArea').classList.add('hidden');
+            document.getElementById('resultsArea').classList.remove('hidden');
+            const { correct, wrong, totalAnswered } = appState.stats;
+            let percentage = totalAnswered > 0 ? (correct / totalAnswered) * 100 : 0;
+            document.getElementById('resAnswered').innerText = totalAnswered;
+            document.getElementById('resCorrect').innerText = correct;
+            document.getElementById('resWrong').innerText = wrong;
+            const percentText = document.getElementById('resPercentageText');
+            percentText.innerText = percentage.toFixed(1) + '%';
+            document.getElementById('resProgressBar').style.width = percentage + '%';
+            if (percentage >= 85) percentText.className = "text-3xl md:text-4xl font-bold text-green-600 dark:text-green-400";
+            else if (percentage >= 50) percentText.className = "text-3xl md:text-4xl font-bold text-yellow-600 dark:text-yellow-400";
+            else percentText.className = "text-3xl md:text-4xl font-bold text-red-600 dark:text-red-400";
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+    </script>
+</body>
+</html>
