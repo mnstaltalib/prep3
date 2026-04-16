@@ -35,9 +35,9 @@
         .glass-nav-mob { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-top: 1px solid rgba(0,0,0,0.05); padding-bottom: env(safe-area-inset-bottom); }
         .dark .glass-nav-mob { background: rgba(20, 20, 20, 0.95); border-top: 1px solid rgba(255,255,255,0.05); }
 
-        .clamp-single-line { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; word-break: break-all; white-space: nowrap; text-overflow: ellipsis; }
         u { text-decoration: underline; text-decoration-color: #ef4444; text-underline-offset: 4px; text-decoration-thickness: 2px; font-weight: 800; color: inherit; }
         body { -webkit-tap-highlight-color: transparent; }
+        
         .feedback-slide { animation: slideDown 0.4s ease-out forwards; }
         @keyframes slideDown { from { opacity: 0; max-height: 0; transform: translateY(-10px); } to { opacity: 1; max-height: 500px; transform: translateY(0); } }
 
@@ -50,7 +50,7 @@
     </style>
 </head>
 
-<body class="bg-[#f8fafc] text-slate-800 dark:bg-[#0f1115] dark:text-gray-200 transition-colors duration-300 flex h-[100dvh] overflow-hidden">
+<body class="bg-[#f8fafc] text-slate-800 dark:bg-[#0f1115] dark:text-gray-200 transition-colors duration-300 flex h-screen overflow-hidden">
 
     <aside class="hidden md:flex flex-col w-72 bg-white dark:bg-[#16181d] border-l border-slate-200 dark:border-neutral-800/50 h-full z-20 shadow-[rgba(0,0,0,0.02)_0px_0px_20px_0px]">
         <div class="h-24 flex items-center gap-4 px-8 border-b border-slate-100 dark:border-neutral-800/50 cursor-pointer" onclick="App.navigate('home')">
@@ -81,7 +81,7 @@
                     <div class="absolute top-0 right-0 w-full h-full opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"></div>
                     <div class="relative z-10 w-full md:w-2/3 text-center md:text-right">
                         <span class="md:hidden inline-block px-4 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-bold mb-3 border border-white/20 tracking-wider">جميع الحقوق محفوظة&copy;</span>
-                        <h1 class="font-black mb-3 leading-tight flex flex-col md:block"><span class="text-lg md:text-xl lg:text-2xl text-blue-200 mb-1">مرحباً بك في عالم</span><span class="text-[32px] md:text-[46px] lg:text-[56px] text-white drop-shadow-md clamp-single-line">التعلم الذكي</span></h1>
+                        <h1 class="font-black mb-3 leading-tight flex flex-col md:block"><span class="text-lg md:text-xl lg:text-2xl text-blue-200 mb-1">مرحباً بك في عالم</span><span class="text-[32px] md:text-[46px] lg:text-[56px] text-white drop-shadow-md">التعلم الذكي</span></h1>
                         <p class="text-blue-100 text-sm md:text-lg max-w-xl mx-auto md:mx-0 opacity-90 leading-relaxed">تدرب بلا حدود، اختبر مهاراتك، وراجع مناهجك بطريقة تفاعلية.</p>
                     </div>
                     <div class="relative z-10 hidden md:flex w-1/3 justify-end"><i class="fa-solid fa-rocket text-[100px] lg:text-[120px] text-white/20 animate-pulse"></i></div>
@@ -109,8 +109,8 @@
                 <div id="selection-list-screen" class="hidden mt-2 md:mt-4">
                     <div class="bg-white dark:bg-[#16181d] rounded-3xl md:rounded-[2rem] border border-slate-100 dark:border-neutral-800 overflow-hidden flex flex-col h-[75vh] md:h-[70vh] relative">
                         <div class="p-3 md:p-6 border-b border-slate-100 dark:border-neutral-800/50 flex justify-between items-center bg-slate-50/50 dark:bg-neutral-900/20 shrink-0">
-                            <h2 id="selection-list-title" class="font-black text-[13px] md:text-xl dark:text-white clamp-single-line flex-1 pl-2 text-right"></h2>
-                            <button onclick="App.showSubjectsGrid()" class="hidden md:block text-sm font-bold bg-white dark:bg-neutral-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-neutral-700 px-5 py-2 rounded-xl border border-slate-200 dark:border-neutral-700 shrink-0">عودة للمواد <i class="fa-solid fa-arrow-left ml-2"></i></button>
+                            <h2 id="selection-list-title" class="font-black text-[13px] md:text-xl dark:text-white flex-1 pl-2 text-right leading-snug"></h2>
+                            <button onclick="App.showSubjectsGrid()" class="hidden md:block text-sm font-bold bg-white dark:bg-neutral-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-neutral-700 px-5 py-2 rounded-xl border border-slate-200 dark:border-neutral-700 shrink-0">العودة للمواد <i class="fa-solid fa-arrow-left ml-2"></i></button>
                             <button onclick="App.showSubjectsGrid()" class="md:hidden w-8 h-8 rounded-xl bg-white dark:bg-neutral-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-neutral-700 flex items-center justify-center shrink-0 shadow-sm"><i class="fa-solid fa-arrow-left text-xs"></i></button>
                         </div>
                         <div id="selection-list-items" class="p-3 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4 overflow-y-auto flex-1 content-start pb-24 md:pb-28"></div>
@@ -122,7 +122,7 @@
             <section id="view-start-options" class="view-section hidden max-w-4xl mx-auto">
                 <div class="bg-white dark:bg-[#16181d] rounded-[2rem] border border-slate-100 dark:border-neutral-800 p-6 md:p-12 text-center shadow-sm">
                     <div class="w-16 h-16 md:w-20 md:h-20 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-full flex items-center justify-center text-3xl md:text-4xl mx-auto mb-4 md:mb-6"><i class="fa-solid fa-clipboard-list"></i></div>
-                    <h2 class="font-black mb-2 dark:text-white whitespace-nowrap w-full tracking-tight" style="font-size: clamp(1rem, 4vw, 1.875rem);">ما القسم الذي تريد البدء به؟</h2>
+                    <h2 class="font-black mb-2 dark:text-white whitespace-nowrap tracking-tight mx-auto" style="font-size: min(5.5vw, 1.875rem);">ما القسم الذي تريد البدء به؟</h2>
                     <p class="text-slate-500 mb-6 text-xs md:text-base">اختر القسم الذي تفضله للبدء. يمكنك إكمال باقي الأقسام لاحقاً.</p>
                     <div id="start-options-grid"></div>
                     <button onclick="App.showSubjectsGrid()" class="mt-6 md:mt-8 text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs md:text-sm font-bold transition-colors">العودة للمواد</button>
@@ -164,7 +164,6 @@
         window.addExam = function(meta, rawQuestions) {
             let parsedQuestions = []; const subId = subjectMap[meta.subject] || meta.subject;
             rawQuestions.forEach(q => {
-                // إصلاح مشكلة الصفر في المترجم
                 if (q[0] === 'passage') {
                     q[2].forEach(sub => {
                         if (sub[0] === 'mcq') parsedQuestions.push({ section: 'passage', type: 'mcq', time: sub[1], question: sub[2], options: sub[3], answer: sub[4], passageText: q[1] });
@@ -389,11 +388,11 @@
                             <div onclick="App.toggleLessonSelection('${item.id}', this)" class="group p-3 md:p-4 bg-white dark:bg-[#1e2025] border border-slate-200 dark:border-neutral-700 rounded-xl md:rounded-2xl cursor-pointer transition-all flex justify-between items-center shadow-sm">
                                 <div class="flex items-center gap-3 md:gap-4 overflow-hidden">
                                     <div class="lesson-checkbox w-5 h-5 md:w-6 md:h-6 rounded border border-slate-300 dark:border-slate-600 flex items-center justify-center text-white transition-colors shrink-0"><i class="fa-solid fa-check opacity-0 text-[10px] md:text-xs"></i></div>
-                                    <div class="overflow-hidden"><h3 class="font-bold text-[13px] md:text-base text-slate-800 dark:text-white mb-0.5 truncate">${item.title}</h3><p class="text-[10px] md:text-xs font-bold text-slate-400"><i class="fa-solid fa-list-ul ml-1"></i> ${item.count} سؤال</p></div>
+                                    <div class="overflow-hidden"><h3 class="font-bold text-[13px] md:text-base text-slate-800 dark:text-white mb-0.5 leading-snug">${item.title}</h3><p class="text-[10px] md:text-xs font-bold text-slate-400"><i class="fa-solid fa-list-ul ml-1"></i> ${item.count} سؤال</p></div>
                                 </div>
                             </div>`;
                     });
-                    actionBar.innerHTML = `<button onclick="App.startFlow(null)" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 md:py-3 rounded-xl font-bold shadow-md shadow-blue-500/20 transition-all text-sm md:text-base">بدء الاختبار المخصص <i class="fa-solid fa-play ml-2 text-[10px] md:text-xs"></i></button>`;
+                    actionBar.innerHTML = `<button onclick="App.startFlow(null)" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 md:py-3 rounded-xl font-bold shadow-md shadow-blue-500/20 transition-all text-sm md:text-base">بدء التدريب المخصص <i class="fa-solid fa-play ml-2 text-[10px] md:text-xs"></i></button>`;
                     actionBar.classList.remove('hidden');
                 } else {
                     items.forEach(item => {
@@ -403,7 +402,7 @@
                             <div onclick="${onClickAction}" class="group p-3 md:p-4 bg-white dark:bg-[#1e2025] border border-slate-100 dark:border-neutral-800 rounded-xl md:rounded-2xl hover:border-blue-300 dark:hover:border-blue-700 cursor-pointer transition-all flex justify-between items-center shadow-sm">
                                 <div class="flex items-center gap-3 md:gap-4 overflow-hidden">
                                     <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-slate-50 dark:bg-neutral-900 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors shrink-0"><i class="fa-solid ${iconClass} text-base md:text-xl"></i></div>
-                                    <div class="overflow-hidden"><h3 class="font-bold text-[13px] md:text-base text-slate-800 dark:text-white mb-0.5 truncate">${item.title}</h3>${item.count ? `<p class="text-[10px] md:text-xs font-bold text-slate-400"><i class="fa-solid fa-list-ul ml-1"></i> ${item.count} سؤال</p>` : ''}</div>
+                                    <div class="overflow-hidden"><h3 class="font-bold text-[13px] md:text-base text-slate-800 dark:text-white mb-0.5 leading-snug">${item.title}</h3>${item.count ? `<p class="text-[10px] md:text-xs font-bold text-slate-400"><i class="fa-solid fa-list-ul ml-1"></i> ${item.count} سؤال</p>` : ''}</div>
                                 </div>
                                 <div class="w-8 h-8 rounded-full bg-slate-50 dark:bg-neutral-900 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors text-slate-400 shrink-0 shadow-sm border border-slate-100 dark:border-neutral-800">${actionBtnHtml}</div>
                             </div>`;
@@ -422,6 +421,20 @@
                     checkbox.classList.add('bg-blue-500', 'border-blue-500'); checkbox.classList.remove('border-slate-300', 'dark:border-slate-600');
                     icon.classList.remove('opacity-0'); el.classList.add('border-blue-500', 'dark:border-blue-700', 'bg-blue-50/20', 'dark:bg-blue-900/10');
                 }
+            },
+            showSubjectsGrid: function() {
+                document.getElementById('main-scroll-area').scrollTop = 0;
+                document.querySelectorAll('.view-section').forEach(sec => sec.classList.add('hidden'));
+                
+                const moduleSelector = document.getElementById('view-module-selector');
+                moduleSelector.classList.remove('hidden');
+                
+                document.getElementById('selection-list-screen').classList.add('hidden');
+                
+                const subScreen = document.getElementById('module-subjects-screen');
+                subScreen.classList.remove('hidden', 'animate-enter'); 
+                void subScreen.offsetWidth; 
+                subScreen.classList.add('animate-enter');
             },
             startFlow: function(fileId = null) {
                 AudioSys.init(); 
@@ -502,7 +515,7 @@
                 const container = document.getElementById('view-quiz-engine');
                 if (!container) return;
                 container.innerHTML = `
-                    <div id="engine-quiz-view" class="hidden h-full flex flex-col">
+                    <div id="engine-quiz-view" class="hidden min-h-full flex flex-col">
                         <div class="mb-3 md:mb-5 w-full shrink-0">
                             <div class="flex justify-between items-center py-2 px-1">
                                 <div class="font-bold text-slate-600 dark:text-slate-300 text-[13px] md:text-base">سؤال <span id="eng-q-current" class="text-blue-600 dark:text-blue-400">1</span> من <span id="eng-q-total">10</span></div>
@@ -511,7 +524,7 @@
                             <div id="eng-timer-container" class="hidden h-1 w-full bg-slate-200 dark:bg-neutral-700 rounded-full overflow-hidden"><div id="eng-timer-bar" class="h-full bg-blue-500 transition-all duration-1000 ease-linear" style="width: 100%;"></div></div>
                         </div>
 
-                        <div class="relative flex-1 flex flex-col bg-white dark:bg-[#16181d] rounded-2xl md:rounded-3xl shadow-sm border border-slate-100 dark:border-neutral-800 pb-4 min-h-[300px] mb-4 md:mb-6 overflow-hidden">
+                        <div class="relative flex-1 flex flex-col bg-white dark:bg-[#16181d] rounded-2xl md:rounded-3xl shadow-sm border border-slate-100 dark:border-neutral-800 pb-4 mb-4 md:mb-6 overflow-hidden">
                             <div id="eng-blur-overlay" class="hidden absolute inset-0 z-20 bg-white/70 dark:bg-[#16181d]/80 backdrop-blur-md flex flex-col items-center justify-center rounded-2xl md:rounded-3xl">
                                 <div class="bg-white dark:bg-[#1e2025] p-6 rounded-2xl shadow-xl text-center border border-slate-100 dark:border-neutral-800"><i class="fa-solid fa-eye-slash text-4xl text-slate-400 mb-4"></i><h3 class="text-lg font-black mb-2 dark:text-white">السؤال مخفي</h3><button onclick="Engine.revealQuestion()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-xl font-bold transition-all shadow-md mt-4 text-sm">إظهار وبدء الوقت</button></div>
                             </div>
@@ -519,8 +532,8 @@
                             <div id="eng-passage-area" class="hidden"></div>
                             
                             <div class="px-4 py-4 md:px-8 md:py-6 flex flex-col flex-1">
-                                <div class="w-full min-h-[60px] md:min-h-[80px] flex items-center"><h3 id="eng-question-text" class="w-full"></h3></div>
-                                <div id="eng-interaction-area" class="w-full flex-1 mt-2"></div>
+                                <h3 id="eng-question-text" class="w-full"></h3>
+                                <div id="eng-interaction-area" class="w-full flex-1"></div>
                                 <div id="eng-feedback-area" class="hidden"></div>
                             </div>
                         </div>
@@ -589,9 +602,9 @@
                 let baseTextClass = "font-black leading-relaxed text-slate-900 dark:text-white ";
                 
                 if (q.type === 'tf') {
-                    baseTextClass += "text-center ";
+                    baseTextClass += "text-center flex items-center justify-center min-h-[80px] md:min-h-[120px] mb-4 ";
                 } else {
-                    baseTextClass += "text-right ";
+                    baseTextClass += "mb-4 md:mb-6 text-right ";
                 }
 
                 if (q.question.length > 100) baseTextClass += "text-[13px] md:text-lg"; 
@@ -620,9 +633,9 @@
                         intArea.innerHTML += `<button onclick="Engine.submitAnswer(${opt.val}, this)" class="eng-opt-btn flex flex-col items-center justify-center aspect-square w-28 md:w-36 rounded-2xl md:rounded-3xl border-2 border-slate-200 dark:border-neutral-700 bg-slate-50 dark:bg-neutral-800/50 transition-all group"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white dark:bg-neutral-900 flex items-center justify-center text-xl md:text-3xl text-slate-400 shadow-sm mb-2 border border-slate-100 dark:border-neutral-800 transition-colors"><i class="fa-solid ${opt.icon}"></i></div><span class="font-bold md:font-black text-base md:text-xl text-slate-700 dark:text-slate-200">${opt.text}</span></button>`;
                     });
                 } else {
-                    intArea.className = "w-full flex flex-col h-full relative";
+                    intArea.className = "w-full flex flex-col relative";
                     intArea.innerHTML = `
-                        <textarea id="eng-text-input" rows="5" class="w-full flex-1 p-4 pb-14 rounded-xl bg-slate-50 dark:bg-neutral-800/50 border border-slate-200 dark:border-neutral-700 focus:outline-none focus:border-blue-500 text-slate-800 dark:text-white font-medium resize-none shadow-inner text-[13px] md:text-base" placeholder="اكتب إجابتك هنا..."></textarea>
+                        <textarea id="eng-text-input" rows="4" class="w-full p-4 pb-14 rounded-xl bg-slate-50 dark:bg-neutral-800/50 border border-slate-200 dark:border-neutral-700 focus:outline-none focus:border-blue-500 text-slate-800 dark:text-white font-medium resize-none shadow-inner text-[13px] md:text-base" placeholder="اكتب إجابتك هنا..."></textarea>
                         <button onclick="Engine.submitAnswer(null, this)" class="absolute bottom-2 left-2 bg-blue-600 text-white px-5 py-2 rounded-lg font-bold shadow-md transition-all text-xs md:text-sm hover:bg-blue-700">تسليم الإجابة <i class="fa-solid fa-paper-plane ml-1"></i></button>
                     `;
                 }
@@ -695,22 +708,23 @@
                 this.showFB(status, correctAns, isTimeUp);
             },
             showFB: function(status, correctAns, isTimeUp) {
-                const fbArea = document.getElementById('eng-feedback-area'); let text, icon, msg;
-                if (isTimeUp) { text = 'text-red-500'; icon = 'fa-clock'; msg = 'انتهى الوقت!'; }
-                else if (status === 'correct') { text = 'text-green-500'; icon = 'fa-check-circle'; msg = 'إجابة صحيحة!'; }
-                else if (status === 'acceptable') { text = 'text-blue-500'; icon = 'fa-check'; msg = 'إجابة مقبولة.'; }
-                else if (status === 'incomplete') { text = 'text-yellow-500'; icon = 'fa-triangle-exclamation'; msg = 'إجابة ناقصة.'; }
-                else { text = 'text-red-500'; icon = 'fa-xmark-circle'; msg = 'إجابة خاطئة.'; }
+                const fbArea = document.getElementById('eng-feedback-area'); let bg, text, icon, msg;
+                if (isTimeUp) { bg = 'bg-red-50 border-red-200'; text = 'text-red-600'; icon = 'fa-clock'; msg = 'انتهى الوقت!'; }
+                else if (status === 'correct') { bg = 'bg-green-50 border-green-200'; text = 'text-green-600'; icon = 'fa-check-circle'; msg = 'إجابة صحيحة!'; }
+                else if (status === 'acceptable') { bg = 'bg-blue-50 border-blue-200'; text = 'text-blue-600'; icon = 'fa-check'; msg = 'إجابة مقبولة.'; }
+                else if (status === 'incomplete') { bg = 'bg-yellow-50 border-yellow-200'; text = 'text-yellow-600'; icon = 'fa-triangle-exclamation'; msg = 'إجابة ناقصة.'; }
+                else { bg = 'bg-red-50 border-red-200'; text = 'text-red-600'; icon = 'fa-xmark-circle'; msg = 'إجابة خاطئة.'; }
 
                 fbArea.innerHTML = `
-                    <div class="font-bold text-[13px] md:text-base ${text} flex items-center gap-2 mb-1"><i class="fa-solid ${icon}"></i> ${msg}</div>
-                    ${status !== 'correct' && correctAns ? `<div class="text-[12px] md:text-sm font-bold text-slate-600 dark:text-slate-400 flex items-start gap-1 mt-2"><i class="fa-solid fa-arrow-turn-down rotate-90 text-green-500 mt-1 opacity-50 mr-1"></i><div><span class="text-green-600 dark:text-green-500">الإجابة: </span>${correctAns}</div></div>` : ''}
-                `;
+                    <div class="p-4 md:p-5 rounded-2xl border ${bg} dark:bg-opacity-10 dark:border-opacity-20 shadow-sm">
+                        <div class="font-black text-sm md:text-lg ${text} flex items-center gap-2"><i class="fa-solid ${icon}"></i> ${msg}</div>
+                        ${status !== 'correct' && correctAns ? `<div class="mt-3 text-[13px] md:text-base font-bold text-slate-700 dark:text-slate-300 flex items-start gap-2"><i class="fa-solid fa-arrow-turn-down rotate-90 text-green-500 mt-1 opacity-80"></i><div><span class="text-green-600 dark:text-green-500">الإجابة الصحيحة: </span>${correctAns}</div></div>` : ''}
+                    </div>`;
 
-                fbArea.className = 'mt-2 md:mt-4 pt-2 md:pt-4 border-t border-slate-100 dark:border-neutral-800/50 feedback-slide';
+                fbArea.className = 'mt-4 md:mt-5 block feedback-slide';
                 
                 const btnNext = document.getElementById('eng-btn-next'); btnNext.innerText = (this.state.currentIndex === this.state.queue.length - 1) ? 'إنهاء القسم' : 'السؤال التالي'; btnNext.classList.remove('hidden');
-                setTimeout(() => document.getElementById('main-scroll-area').scrollTop = document.getElementById('main-scroll-area').scrollHeight, 100);
+                setTimeout(() => { if(btnNext.scrollIntoView) btnNext.scrollIntoView({behavior: "smooth", block: "end"}); }, 100);
             },
             highOp: function(idx, type, el = null) {
                 const btn = el || document.querySelectorAll('.eng-opt-btn')[idx]; if (!btn) return;
