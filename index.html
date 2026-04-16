@@ -244,6 +244,7 @@
             }
         };
 
+        // فتح قفل الصوت بأول لمسة
         document.body.addEventListener('click', () => { AudioSys.init(); }, { once: true });
         document.body.addEventListener('touchstart', () => { AudioSys.init(); }, { once: true });
     </script>
@@ -535,7 +536,9 @@
                         <div class="mb-3 md:mb-5 w-full shrink-0">
                             <div class="flex justify-between items-center py-2 px-1 gap-2">
                                 <div class="font-bold text-slate-600 dark:text-slate-300 text-[13px] md:text-base shrink-0">سؤال <span id="eng-q-current" class="text-blue-600 dark:text-blue-400">1</span> من <span id="eng-q-total">10</span></div>
-                                <div id="eng-header-lesson-title" class="flex-1 text-center font-bold text-slate-400 dark:text-slate-500 clamp-single-line opacity-70" style="font-size: clamp(0.55rem, 2.5vw, 0.8rem);"></div>
+                                <div class="flex-1 flex justify-center mx-2 overflow-hidden">
+                                    <span id="eng-header-lesson-title" class="hidden bg-slate-100 dark:bg-neutral-800 border border-slate-200 dark:border-neutral-700 text-slate-500 dark:text-slate-400 px-3 py-0.5 rounded-lg font-bold clamp-single-line shadow-sm" style="font-size: clamp(0.6rem, 2.5vw, 0.8rem);"></span>
+                                </div>
                                 <div id="eng-header-action" class="flex items-center shrink-0"></div>
                             </div>
                             <div id="eng-timer-container" class="hidden h-1 w-full bg-slate-200 dark:bg-neutral-700 rounded-full overflow-hidden"><div id="eng-timer-bar" class="h-full bg-blue-500 transition-all duration-1000 ease-linear" style="width: 100%;"></div></div>
@@ -602,7 +605,14 @@
                 document.getElementById('eng-q-total').innerText = this.state.queue.length;
 
                 const titleEl = document.getElementById('eng-header-lesson-title');
-                if (titleEl) titleEl.innerText = q.sourceTitle || '';
+                if (titleEl) {
+                    if (q.sourceTitle) {
+                        titleEl.innerText = q.sourceTitle;
+                        titleEl.classList.remove('hidden');
+                    } else {
+                        titleEl.classList.add('hidden');
+                    }
+                }
 
                 const feedback = document.getElementById('eng-feedback-area');
                 feedback.className = 'hidden';
@@ -747,10 +757,11 @@
                 
                 const btnNext = document.getElementById('eng-btn-next'); btnNext.innerText = (this.state.currentIndex === this.state.queue.length - 1) ? 'إنهاء القسم' : 'السؤال التالي'; btnNext.classList.remove('hidden');
                 
+                // سكرول ناعم وتلقائي للأسفل لضمان عدم توقف السكرول في المنتصف
                 const scrollArea = document.getElementById('main-scroll-area');
-                const doScroll = () => { if(scrollArea) scrollArea.scrollTo({ top: scrollArea.scrollHeight, behavior: 'smooth' }); };
-                setTimeout(doScroll, 50);
-                setTimeout(doScroll, 350); 
+                const scrollDown = () => { if (scrollArea) scrollArea.scrollTo({ top: scrollArea.scrollHeight, behavior: 'smooth' }); };
+                setTimeout(scrollDown, 50);
+                setTimeout(scrollDown, 350); 
             },
             highOp: function(idx, type, el = null) {
                 const btn = el || document.querySelectorAll('.eng-opt-btn')[idx]; if (!btn) return;
@@ -793,6 +804,7 @@
                 else if (pct >= 50) { b.innerHTML = "👌 مقبول"; b.className = "text-2xl font-black mb-8 py-3 px-8 rounded-2xl inline-block border-2 bg-orange-50 dark:bg-orange-900/30 border-orange-500 text-orange-600 dark:text-orange-400 shadow-sm"; }
                 else { b.innerHTML = "⚠️ ضعيف"; b.className = "text-2xl font-black mb-8 py-3 px-8 rounded-2xl inline-block border-2 bg-red-50 dark:bg-red-900/30 border-red-500 text-red-600 dark:text-red-400 shadow-sm"; }
                 
+                // الاحتفال فقط لـ 65% فأكثر
                 if (pct >= 65 && typeof confetti === 'function') {
                     AudioSys.success();
                     const end = Date.now() + 2500;
