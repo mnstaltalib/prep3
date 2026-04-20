@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>منصة الطالب - المتكاملة</title>
+    <title>منصة الطالب - الصف الثالث الاعدادي الترم الثاني</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -105,7 +105,10 @@
                 <div id="module-subjects-screen" class="hidden mt-2 md:mt-0">
                     <div class="animate-enter flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 mb-6 md:mb-8 bg-white dark:bg-[#16181d] p-5 md:p-8 rounded-[2rem] border border-slate-100 dark:border-neutral-800 text-center md:text-right">
                         <div id="module-icon-box" class="w-14 h-14 md:w-20 md:h-20 rounded-2xl md:rounded-[1.5rem] flex items-center justify-center text-2xl md:text-4xl text-white shadow-lg shrink-0"></div>
-                        <div class="mt-1 md:mt-2"><h1 id="module-title" class="text-2xl md:text-3xl font-black dark:text-white mb-1"></h1><p id="module-desc" class="text-slate-500 text-xs md:text-lg"></p></div>
+                        <div class="mt-1 md:mt-2">
+                            <h1 id="module-title" class="text-2xl md:text-3xl font-black dark:text-white mb-1"></h1>
+                            <p id="module-desc" class="text-slate-500 text-xs md:text-lg"></p>
+                        </div>
                     </div>
                     <div id="subjects-grid" class="flex flex-wrap justify-center gap-3 md:gap-6"></div>
                 </div>
@@ -195,7 +198,14 @@
         };
     </script>
 
-    <script src="data/paths.js"></script>
+    <script src="config.js"></script>
+    <script src="data/bank/arabic/part1.js"></script>
+    <script src="data/bank/arabic/part2.js"></script>
+    <script src="data/bank/arabic/part3.js"></script>
+    <script src="data/bank/arabic/part4.js"></script>
+    <script src="data/exams/arabic/exams_full.js"></script>
+    <script src="data/exams/arabic/grammer_passeges.js"></script>
+    <script src="data/exams/arabic/reading_passges.js"></script>
 
     <script>
         const AudioSys = {
@@ -244,29 +254,12 @@
             }
         };
 
-        // فتح قفل الصوت بأول لمسة
+        // فتح قفل الصوت بأول لمسة في الشاشة
         document.body.addEventListener('click', () => { AudioSys.init(); }, { once: true });
         document.body.addEventListener('touchstart', () => { AudioSys.init(); }, { once: true });
     </script>
 
     <script>
-        const CONFIG = {
-            modules: {
-                home:      { id: 'home' },
-                questions: { id: 'questions', title: 'بنك الأسئلة', desc: 'اختر درساً أو أكثر لتبدأ التدريب.', icon: 'fa-layer-group', color: 'green', isLocked: false, msg: "" },
-                exams:     { id: 'exams', title: 'نظام الاختبارات', desc: 'اختر اختباراً لتبدأ التحدي.', icon: 'fa-stopwatch', color: 'red', isLocked: false, msg: "" },
-                library:   { id: 'library', title: 'المكتبة الرقمية', desc: 'أحدث المذكرات والملفات.', icon: 'fa-book-open', color: 'blue', isLocked: false, msg: "" },
-                capsule:   { id: 'capsule', title: 'كبسولة المنهج', desc: 'مراجعات نهائية للمواد.', icon: 'fa-flask', color: 'yellow', isLocked: false, msg: "" }
-            },
-            subjects: [
-                { id: 'arabic', name: 'لغة عربية', icon: 'fa-book', color: 'green', locked: { questions: false, exams: false, library: false, capsule: false } },
-                { id: 'science', name: 'علوم', icon: 'fa-flask', color: 'purple', locked: { questions: false, exams: true, library: false, capsule: false } },
-                { id: 'social', name: 'دراسات', icon: 'fa-globe', color: 'yellow', locked: { questions: false, exams: false, library: false, capsule: false } },
-                { id: 'math', name: 'رياضيات', icon: 'fa-calculator', color: 'blue', locked: { questions: true, exams: false, library: false, capsule: true } },
-                { id: 'english', name: 'إنجليزي', icon: 'fa-language', color: 'red', locked: { questions: false, exams: false, library: true, capsule: false } }
-            ]
-        };
-
         const App = {
             currentModule: 'home', selectedLessons: [],
             currentExamData: [], pendingSections: [], completedSections: [],
@@ -321,6 +314,16 @@
                     return;
                 }
 
+                // الحماية من undefined باستخدام الوصف التلقائي إذا لم يوضع في config
+                const defaultDescriptions = {
+                    questions: 'اختر درساً أو أكثر لتبدأ التدريب.',
+                    exams: 'اختر اختباراً لتبدأ التحدي.',
+                    library: 'أحدث المذكرات والملفات.',
+                    capsule: 'مراجعات نهائية للمواد.'
+                };
+
+                if (!CONFIG || !CONFIG.modules || !CONFIG.modules[moduleId]) return;
+
                 const config = CONFIG.modules[moduleId];
                 const selectorView = document.getElementById('view-module-selector');
                 selectorView.classList.remove('hidden');
@@ -329,7 +332,8 @@
                     document.getElementById('module-subjects-screen').classList.add('hidden');
                     document.getElementById('selection-list-screen').classList.add('hidden');
                     const lockScreen = document.getElementById('module-lock-screen');
-                    lockScreen.classList.remove('hidden', 'animate-enter'); document.getElementById('module-lock-msg').innerText = config.msg;
+                    lockScreen.classList.remove('hidden', 'animate-enter'); 
+                    document.getElementById('module-lock-msg').innerText = config.msg || "مغلق حالياً.";
                     void lockScreen.offsetWidth; lockScreen.classList.add('animate-enter');
                 } else {
                     document.getElementById('module-lock-screen').classList.add('hidden');
@@ -340,8 +344,10 @@
                     const iconBox = document.getElementById('module-icon-box');
                     iconBox.className = `w-14 h-14 md:w-20 md:h-20 rounded-[1rem] md:rounded-[1.5rem] flex items-center justify-center text-2xl md:text-4xl text-white shadow-lg shadow-${config.color}-500/30 bg-gradient-to-br from-${config.color}-400 to-${config.color}-600 shrink-0`;
                     iconBox.innerHTML = `<i class="fa-solid ${config.icon}"></i>`;
-                    document.getElementById('module-title').innerText = config.title;
-                    document.getElementById('module-desc').innerText = config.desc;
+                    
+                    // استعادة الكلام التلقائي إذا لم يكتبه المستخدم في config
+                    document.getElementById('module-title').innerText = config.title || '';
+                    document.getElementById('module-desc').innerText = config.desc || defaultDescriptions[moduleId] || '';
 
                     this.renderSubjectsGrid(moduleId);
                     void subjectsScreen.offsetWidth; subjectsScreen.classList.add('animate-enter');
@@ -663,9 +669,9 @@
                         intArea.innerHTML += `<button onclick="Engine.submitAnswer(${opt.val}, this)" class="eng-opt-btn flex flex-col items-center justify-center aspect-square w-28 md:w-36 rounded-2xl md:rounded-3xl border-2 border-slate-200 dark:border-neutral-700 bg-slate-50 dark:bg-neutral-800/50 transition-all group"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white dark:bg-neutral-900 flex items-center justify-center text-xl md:text-3xl text-slate-400 shadow-sm mb-2 border border-slate-100 dark:border-neutral-800 transition-colors"><i class="fa-solid ${opt.icon}"></i></div><span class="font-bold md:font-black text-base md:text-xl text-slate-700 dark:text-slate-200">${opt.text}</span></button>`;
                     });
                 } else {
-                    intArea.className = "w-full flex flex-col h-full relative";
+                    intArea.className = "w-full flex flex-col relative shrink-0";
                     intArea.innerHTML = `
-                        <textarea id="eng-text-input" rows="5" class="w-full flex-1 p-4 pb-14 rounded-xl bg-slate-50 dark:bg-neutral-800/50 border border-slate-200 dark:border-neutral-700 focus:outline-none focus:border-blue-500 text-slate-800 dark:text-white font-medium resize-none shadow-inner text-[13px] md:text-base" placeholder="اكتب إجابتك هنا..."></textarea>
+                        <textarea id="eng-text-input" rows="4" class="w-full p-4 pb-14 rounded-xl bg-slate-50 dark:bg-neutral-800/50 border border-slate-200 dark:border-neutral-700 focus:outline-none focus:border-blue-500 text-slate-800 dark:text-white font-medium resize-none shadow-inner text-[13px] md:text-base" placeholder="اكتب إجابتك هنا..."></textarea>
                         <button onclick="Engine.submitAnswer(null, this)" class="absolute bottom-2 left-2 bg-blue-600 text-white px-5 py-2 rounded-lg font-bold shadow-md transition-all text-xs md:text-sm hover:bg-blue-700">تسليم الإجابة <i class="fa-solid fa-paper-plane ml-1"></i></button>
                     `;
                 }
@@ -798,13 +804,14 @@
                 document.getElementById('eng-res-total').innerText = tot; document.getElementById('eng-res-correct').innerText = this.global.correct; document.getElementById('eng-res-wrong').innerText = this.global.wrong + this.global.skipped;
                 const b = document.getElementById('eng-res-badge');
                 
+                // التقديرات الدقيقة وتلوين الدارك مود
                 if (pct >= 85) { b.innerHTML = "🏆 ممتاز"; b.className = "text-2xl font-black mb-8 py-3 px-8 rounded-2xl inline-block border-2 bg-green-50 dark:bg-green-900/30 border-green-500 text-green-600 dark:text-green-400 shadow-sm"; }
                 else if (pct >= 75) { b.innerHTML = "🌟 جيد جداً"; b.className = "text-2xl font-black mb-8 py-3 px-8 rounded-2xl inline-block border-2 bg-blue-50 dark:bg-blue-900/30 border-blue-500 text-blue-600 dark:text-blue-400 shadow-sm"; }
                 else if (pct >= 65) { b.innerHTML = "👍 جيد"; b.className = "text-2xl font-black mb-8 py-3 px-8 rounded-2xl inline-block border-2 bg-yellow-50 dark:bg-yellow-900/30 border-yellow-500 text-yellow-600 dark:text-yellow-400 shadow-sm"; }
                 else if (pct >= 50) { b.innerHTML = "👌 مقبول"; b.className = "text-2xl font-black mb-8 py-3 px-8 rounded-2xl inline-block border-2 bg-orange-50 dark:bg-orange-900/30 border-orange-500 text-orange-600 dark:text-orange-400 shadow-sm"; }
                 else { b.innerHTML = "⚠️ ضعيف"; b.className = "text-2xl font-black mb-8 py-3 px-8 rounded-2xl inline-block border-2 bg-red-50 dark:bg-red-900/30 border-red-500 text-red-600 dark:text-red-400 shadow-sm"; }
                 
-                // الاحتفال فقط لـ 65% فأكثر
+                // الاحتفال فقط لـ 65% فأكثر (جيد، جيد جداً، ممتاز)
                 if (pct >= 65 && typeof confetti === 'function') {
                     AudioSys.success();
                     const end = Date.now() + 2500;
@@ -839,6 +846,7 @@
 
         document.addEventListener('DOMContentLoaded', () => { App.init(); Engine.initUI(); });
     </script>
+    <script src="data/library.js"></script>
     <script src="data/bank/arabic/part1.js"></script>
     <script src="data/bank/arabic/part2.js"></script>
     <script src="data/bank/arabic/part3.js"></script>

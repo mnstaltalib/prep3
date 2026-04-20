@@ -19,8 +19,8 @@ const CONFIG = {
             icon: 'fa-book', 
             color: 'green',
             paths: {
-                bank: 'data/bank/arabic/',   // مسار بنك الأسئلة
-                exams: 'data/exams/arabic/'  // مسار الاختبارات
+            bank: 'data/bank/arabic/',   // مسار بنك الأسئلة
+            exams: 'data/exams/arabic/'  // مسار الاختبارات
             },
             locked: { questions: false, exams: false, capsule: true } 
         },
@@ -30,7 +30,7 @@ const CONFIG = {
             icon: 'fa-flask', 
             color: 'purple',
             paths: { bank: 'data/bank/science/', exams: 'data/exams/science/' },
-            locked: { questions: false, exams: true, capsule: true } 
+            locked: { questions: false, exams: false, capsule: true } 
         },
         { 
             id: 'social', 
@@ -38,7 +38,7 @@ const CONFIG = {
             icon: 'fa-globe', 
             color: 'yellow',
             paths: { bank: 'data/bank/social/', exams: 'data/exams/social/' },
-            locked: { questions: false, exams: false, capsule: false } 
+            locked: { questions: false, exams: false, capsule: true } 
         },
         { 
             id: 'math', 
