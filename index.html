@@ -187,7 +187,11 @@
                 else if (q[0] === 'mcq') parsedQuestions.push({ sourceTitle: meta.title, section: 'mcq', type: 'mcq', time: q[1], question: q[2], options: q[3], answer: q[4] });
                 else parsedQuestions.push({ sourceTitle: meta.title, section: q[0], type: q[0], time: q[1], question: q[2], answer: q[3] });
             });
-            window.DB.exams.push({ id: meta.id, subject: subId, title: meta.title, count: parsedQuestions.length, order: meta.order || 99 });
+            
+            // حماية لمنع تكرار إضافة الاختبار
+            if (!window.DB.exams.some(exam => exam.id === meta.id)) {
+                window.DB.exams.push({ id: meta.id, subject: subId, title: meta.title, count: parsedQuestions.length, order: meta.order || 99 });
+            }
             window.DB.files[meta.id] = parsedQuestions;
         };
 
@@ -197,7 +201,11 @@
                 if (q[1] === 'mcq') parsedQuestions.push({ sourceTitle: lessonTitle, section: 'mcq', type: 'mcq', question: q[3], options: q[4], answer: q[5] });
                 else parsedQuestions.push({ sourceTitle: lessonTitle, section: q[1], type: q[1], question: q[3], answer: q[4] });
             });
-            window.DB.bank.push({ id: lessonId, subject: subId, title: lessonTitle, count: parsedQuestions.length });
+            
+            // حماية لمنع تكرار إضافة درس بنك الأسئلة
+            if (!window.DB.bank.some(lesson => lesson.id === lessonId)) {
+                window.DB.bank.push({ id: lessonId, subject: subId, title: lessonTitle, count: parsedQuestions.length });
+            }
             window.DB.files[lessonId] = parsedQuestions;
         };
 
@@ -207,14 +215,6 @@
     </script>
 
     <script src="config.js"></script>
-    <script src="data/bank/arabic/part1.js"></script>
-    <script src="data/bank/arabic/part2.js"></script>
-    <script src="data/bank/arabic/part3.js"></script>
-    <script src="data/bank/arabic/part4.js"></script>
-    <script src="data/exams/arabic/exams_full.js"></script>
-    <script src="data/exams/arabic/grammer_passeges.js"></script>
-    <script src="data/exams/arabic/reading_passges.js"></script>
-
     <script>
         const AudioSys = {
             ctx: null,
